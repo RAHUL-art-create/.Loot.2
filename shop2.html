@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sellerpage-Apploot</title>
+    <link rel="icon" href="loot_logo.png" type="image/png">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            background: linear-gradient(135deg, #575dfb, #bf4ae8);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+            box-sizing: border-box;
+            position: fixed;
+            left: -250px;
+            top: 0;
+            height: 100%;
+            transition: left 0.3s ease;
+            z-index: 20;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar.show {
+            left: 0;
+        }
+
+        .sidebar button {
+            width: 80%;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #ffffff;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar button.active {
+            background-color: #bf4ae8;
+            color: #ffffff;
+        }
+
+        .sidebar button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px;
+            margin-left: 0;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.shifted {
+            margin-left: 250px;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #ffffff;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .section {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-sizing: border-box;
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .input-field, .upload-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .upload-btn {
+            background-color: #bf4ae8;
+            color: #ffffff;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .upload-btn:hover {
+            background-color: #a23ac7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 30;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .menu-button.hidden {
+            display: none;
+        }
+
+        .back-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: auto;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                left: -100%;
+            }
+
+            .sidebar.show {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 10px;
+            }
+
+            .main-content.shifted {
+                margin-left: 0;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .section {
+                padding: 15px;
+            }
+
+            .input-field, .upload-btn {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .menu-button {
+                top: 10px;
+                left: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <button onclick="window.location.href='acc.html'">Account</button>
+            <button class="active">My Shop</button>
+            <button onclick="window.location.href='loot.html'">Loot</button>
+            <button onclick="window.location.href='explore.html'">Explore</button>
+            <button onclick="window.location.href='rewards.html'">Rewards</button>
+            <button class="back-button" onclick="toggleSidebar()">←</button>
+        </div>
+        <div class="main-content" id="content">
+            <button class="menu-button" id="menuButton" onclick="toggleSidebar()">☰</button>
+            <h1>Shop</h1>
+            <form id="productUploadForm" class="product-upload">
+                <div class="section">
+                    <div class="section-title">Product Name</div>
+                    <input class="input-field" type="text" id="productName" placeholder="Enter product name" required>
+                </div>
+                <div class="section">
+                    <div class="section-title">About</div>
+                    <input class="input-field" type="text" id="productDescription" placeholder="About your product" required>
+                </div>
+                <div class="section">
+                    <div class="section-title">Upload Media</div>
+                    <input class="input-field" type="file" id="productVideo" accept="video/*" required>
+                </div>
+                <div class="section">
+                    <div class="section-title">Connect</div>
+                    <input class="input-field" type="url" id="productLink" placeholder="Upload your website link or portfolio link in ONDC" required>
+                </div>
+                <button type="submit" class="upload-btn">Upload Product</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var content = document.getElementById('content');
+            var menuButton = document.getElementById('menuButton');
+            sidebar.classList.toggle('show');
+            content.classList.toggle('shifted');
+            menuButton.classList.toggle('hidden');
+        }
+    </script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+        import { getDatabase, ref as dbRef, set, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyClf6W3B2nesvjfZtRSMcjbt6NRp6uy-Po",
+            authDomain: "lootbase-4d01f.firebaseapp.com",
+            projectId: "lootbase-4d01f",
+            storageBucket: "lootbase-4d01f.appspot.com",
+            messagingSenderId: "350264696657",
+            appId: "1:350264696657:web:9af597da2f5fd2970d7d70",
+            measurementId: "G-YQK38EMPJK"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const storage = getStorage();
+        const db = getDatabase();
+
+        document.getElementById('productUploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const productName = document.getElementById('productName').value;
+            const productDescription = document.getElementById('productDescription').value;
+            const productVideo = document.getElementById('productVideo').files[0];
+            const productLink = document.getElementById('productLink').value;
+
+            const currentTime = new Date();
+            const timeString = `${currentTime.getHours()}_${currentTime.getMinutes()}_${currentTime.getSeconds()}`;
+            const fileName = `${productName}_${timeString}.mp4`; // Ensure the file extension is included
+
+            const videoRef = storageRef(storage, `productVideos/${fileName}`);
+            await uploadBytes(videoRef, productVideo);
+            const videoUrl = await getDownloadURL(videoRef);
+
+            const newProductRef = push(dbRef(db, 'Products'));
+            await set(newProductRef, {
+                name: productName,
+                description: productDescription,
+                videoUrl: videoUrl,
+                link: productLink,
+            });
+
+            alert("Product Uploaded Successfully!");
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>
