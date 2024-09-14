@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppLoot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6200EE;
+            --secondary-color: #03DAC6;
+            --text-color: #333333;
+            --background-color: #f4f4f4;
+            --card-color: #ffffff;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+        .header {
+            background-color: var(--primary-color);
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: var(--card-color);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .sidebar {
+            background-color: var(--card-color);
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            height: 100%;
+            transition: left 0.3s ease-in-out;
+            z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        .sidebar.open {
+            left: 0;
+        }
+        .sidebar-content {
+            padding: 20px;
+        }
+        .sidebar-content button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: transparent;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 5px;
+        }
+        .sidebar-content button:hover {
+            background-color: var(--primary-color);
+            color: var(--card-color);
+        }
+        .main-content {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .card {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 20px;
+        }
+        .button {
+            background-color: var(--primary-color);
+            color: var(--card-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .button:hover {
+            background-color: var(--secondary-color);
+            transform: scale(1.05);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input, textarea {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="sidebar-toggle" class="button"><i class="fas fa-bars"></i></button>
+        <div class="logo">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-UB3YwtY47FNZUa1OIU2nf5keC2qrB8.png" alt="AppLoot Logo">
+            <h1>AppLoot</h1>
+        </div>
+        <span id="user-email"></span>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <button id="close-sidebar"><i class="fas fa-times"></i></button>
+            <h2>Menu</h2>
+            <button data-view="explore"><i class="fas fa-search"></i> Explore</button>
+            <button data-view="loot"><i class="fas fa-gift"></i> Loot</button>
+            <button data-view="shop"><i class="fas fa-store"></i> Shop</button>
+            <button data-view="rewards"><i class="fas fa-trophy"></i> Rewards</button>
+            <button data-view="account"><i class="fas fa-user"></i> Account</button>
+            <button id="login-button"><i class="fas fa-sign-in-alt"></i> Login / Sign Up</button>
+            <button id="logout-button" class="hidden"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="login-signup" class="main-content hidden">
+            <h2>Sign In</h2>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit" class="button"><i class="fas fa-sign-in-alt"></i> Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+        </div>
+
+        <div id="signup-form" class="main-content hidden">
+            <h2>Sign Up</h2>
+            <form id="signup-form">
+                <input type="text" id="signup-name" placeholder="Name" required>
+                <input type="email" id="signup-email" placeholder="Email" required>
+                <input type="password" id="signup-password" placeholder="Password" required>
+                <button type="submit" class="button"><i class="fas fa-user-plus"></i> Sign Up</button>
+            </form>
+            <p>Already have an account? <a href="#" id="show-login">Sign In</a></p>
+        </div>
+
+        <div id="dashboard">
+            <div id="explore" class="main-content">
+                <h2><i class="fas fa-search"></i> Explore</h2>
+                <div id="products-grid" class="grid"></div>
+            </div>
+
+            <div id="loot" class="main-content hidden">
+                <h2><i class="fas fa-gift"></i> Loot Deals</h2>
+                <div id="offer-cards-grid" class="grid"></div>
+            </div>
+
+            <div id="shop" class="main-content hidden">
+                <h2><i class="fas fa-store"></i> Upload Product</h2>
+                <form id="upload-product-form">
+                    <input type="text" id="product-name" placeholder="Product Name" required>
+                    <textarea id="product-description" placeholder="Description" required></textarea>
+                    <input type="file" id="product-video" accept="video/*" required>
+                    <input type="url" id="product-link" placeholder="Product Link" required>
+                    <button type="submit" class="button"><i class="fas fa-upload"></i> Upload Product</button>
+                </form>
+            </div>
+
+            <div id="rewards" class="main-content hidden">
+                <h2><i class="fas fa-trophy"></i> Your Rewards</h2>
+                <div id="rewards-grid" class="grid"></div>
+            </div>
+
+            <div id="account" class="main-content hidden">
+                <h2><i class="fas fa-user"></i> Account</h2>
+                <p><strong>Email:</strong> <span id="account-email"></span></p>
+                <div>
+                    <h3>My Box</h3>
+                    <div class="card">
+                        <div class="card-content">
+                            <h4><i class="fas fa-mobile-alt"></i> Apps</h4>
+                            <button class="button">Add More</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <h4><i class="fas fa-globe"></i> Web</h4>
+                            <button class="button">Add More</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content">
+                            <h4><i class="fas fa-box"></i> Items</h4>
+                            <button class="button">Add More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyClf6W3B2nesvjfZtRSMcjbt6NRp6uy-Po",
+            authDomain: "lootbase-4d01f.firebaseapp.com",
+            projectId: "lootbase-4d01f",
+            storageBucket: "lootbase-4d01f.appspot.com",
+            messagingSenderId: "350264696657",
+            appId: "1:350264696657:web:9af597da2f5fd2970d7d70",
+            measurementId: "G-YQK38EMPJK"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        // DOM Elements
+        const loginSignupDiv = document.getElementById('login-signup');
+        const signupFormDiv = document.getElementById('signup-form');
+        const dashboardDiv = document.getElementById('dashboard');
+        const userEmailSpan = document.getElementById('user-email');
+        const accountEmailSpan = document.getElementById('account-email');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const closeSidebar = document.getElementById('close-sidebar');
+        const logoutButton = document.getElementById('logout-button');
+        const loginButton = document.getElementById('login-button');
+        const showSignupLink = document.getElementById('show-signup');
+        const showLoginLink = document.getElementById('show-login');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const uploadProductForm = document.getElementById('upload-product-form');
+        const viewButtons = document.querySelectorAll('[data-view]');
+        const views = ['explore', 'loot', 'shop', 'rewards', 'account'];
+
+        // Firebase Auth
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                userEmailSpan.textContent = user.email;
+                accountEmailSpan.textContent = user.email;
+                loginButton.classList.add('hidden');
+                logoutButton.classList.remove('hidden');
+            } else {
+                userEmailSpan.textContent = '';
+                accountEmailSpan.textContent = '';
+                loginButton.classList.remove('hidden');
+                logoutButton.classList.add('hidden');
+            }
+        });
+
+        // Event Listeners
+        sidebarToggle.addEventListener('click', () => sidebar.classList.add('open'));
+        closeSidebar.addEventListener('click', () => sidebar.classList.remove('open'));
+        logoutButton.addEventListener('click', () => firebase.auth().signOut());
+        loginButton.addEventListener('click', () => {
+            loginSignupDiv.classList.remove('hidden');
+            signupFormDiv.classList.add('hidden');
+            sidebar.classList.remove('open');
+        });
+        showSignupLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginSignupDiv.classList.add('hidden');
+            signupFormDiv.classList.remove('hidden');
+        });
+        showLoginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginSignupDiv.classList.remove('hidden');
+            signupFormDiv.classList.add('hidden');
+        });
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    loginSignupDiv.classList.add('hidden');
+                })
+                .catch((error) => alert('Login Error: ' + error.message));
+        });
+
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((userCredential) =>
+                    firebase.database().ref('users/' + userCredential.user.uid).set({
+                        name: name,
+                        email: email
+                    })
+                )
+                .then(() => {
+                    signupFormDiv.classList.add('hidden');
+                })
+                .catch((error) => alert('Signup Error: ' + error.message));
+        });
+
+        uploadProductForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('product-name').value;
+            const description = document.getElementById('product-description').value;
+            const video = document.getElementById('product-video').files[0];
+            const link = document.getElementById('product-link').value;
+            
+            const user = firebase.auth().currentUser;
+            if (user) {
+                const fileName = `${name}_${Date.now()}.mp4`;
+                const storageRef = firebase.storage().ref('productVideos/' + fileName);
+                
+                storageRef.put(video).then(() => {
+                    return storageRef.getDownloadURL();
+                }).then((videoUrl) => {
+                    return firebase.database().ref('Products').push({
+                        name: name,
+                        description: description,
+                        videoUrl: videoUrl,
+                        link: link,
+                    });
+                }).then(() => {
+                    alert('Product uploaded successfully!');
+                    uploadProductForm.reset();
+                    loadProducts();
+                }).catch((error) => {
+                    console.error('Error uploading product:', error);
+                    alert('Failed to upload product. Please try again.');
+                });
+            } else {
+                alert('Please log in to upload a product.');
+            }
+        });
+
+        viewButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const view = button.getAttribute('data-view');
+                views.forEach(v => {
+                    document.getElementById(v).classList.add('hidden');
+                });
+                document.getElementById(view).classList.remove('hidden');
+                sidebar.classList.remove('open');
+            });
+        });
+
+        function loadProducts() {
+            const productsGrid = document.getElementById('products-grid');
+            productsGrid.innerHTML = '';
+            firebase.database().ref('Products').once('value').then((snapshot) => {
+                snapshot.forEach((childSnapshot) => {
+                    const product = childSnapshot.val();
+                    const productCard = document.createElement('div');
+                    productCard.className = 'card';
+                    productCard.innerHTML = `
+                        <video src="${product.videoUrl}" controls class="card-image"></video>
+                        <div class="card-content">
+                            <h3>${product.name}</h3>
+                            <p>${product.description}</p>
+                            <a href="${product.link}" target="_blank" class="button"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+                        </div>
+                    `;
+                    productsGrid.appendChild(productCard);
+                });
+            });
+        }
+
+        function loadOfferCards() {
+            const offerCardsGrid = document.getElementById('offer-cards-grid');
+            offerCardsGrid.innerHTML = '';
+            firebase.database().ref('OfferCards').once('value').then((snapshot) => {
+                snapshot.forEach((childSnapshot) => {
+                    const offerCard = childSnapshot.val();
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <img src="${offerCard.imageUrl}" alt="${offerCard.productName}" class="card-image">
+                        <div class="card-content">
+                            <h3>${offerCard.productName}</h3>
+                            <p>${offerCard.offerPercentage}% OFF</p>
+                            <button class="button"><i class="fas fa-tag"></i> Claim Offer</button>
+                        </div>
+                    `;
+                    offerCardsGrid.appendChild(card);
+                });
+            });
+        }
+
+        function loadRewards() {
+            const rewardsGrid = document.getElementById('rewards-grid');
+            rewardsGrid.innerHTML = '';
+            const rewards = [
+                { name: "Daily Bonus", description: "Claim your daily reward", icon: "fa-calendar-check" },
+                { name: "Achievement Badge", description: "For completing 10 tasks", icon: "fa-medal" },
+                { name: "Level Up Reward", description: "Reached level 5!", icon: "fa-level-up-alt" },
+                { name: "Special Event Prize", description: "Winner of the weekly challenge", icon: "fa-award" },
+                { name: "Loyalty Points", description: "Accumulated 1000 points", icon: "fa-star" },
+                { name: "Mystery Box", description: "Random reward for active users", icon: "fa-box-open" },
+            ];
+            rewards.forEach(reward => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-content">
+                        <i class="fas ${reward.icon} fa-3x" style="color: var(--primary-color);"></i>
+                        <h3>${reward.name}</h3>
+                        <p>${reward.description}</p>
+                        <button class="button"><i class="fas fa-gift"></i> Claim Reward</button>
+                    </div>
+                `;
+                rewardsGrid.appendChild(card);
+            });
+        }
+
+        // Initial load
+        loadProducts();
+        loadOfferCards();
+        loadRewards();
+    </script>
+</body>
+</html>
