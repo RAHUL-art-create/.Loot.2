@@ -112,10 +112,6 @@ firebase.initializeApp(firebaseConfig);
 
 Contributions are welcome! Feel free to open an issue or submit a pull request.
 
-## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-
-This README provides detailed instructions for using and configuring your app, as well as a comprehensive feature breakdown. You can adjust specific project URLs and Firebase configurations as necessary.
