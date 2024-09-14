@@ -5,6 +5,11 @@
 
 **Loot** is a user-friendly web application designed to offer a wide range of exciting deals and reward opportunities. Users can explore different products, upload their own items, shop for deals, and earn rewards through an interactive and seamless interface.
 
+## Live Demo
+
+A demo of the app is available [here](https://rahul-art-create.github.io/.Loot.2/).
+
+
 ## Key Features
 
 ### 1. **Explore Products**
