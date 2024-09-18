@@ -197,7 +197,6 @@
         }
         .feature-card p {
             color: var(--text-color);
-            min-height: 3em;
         }
         .achievements {
             background-color: var(--card-color);
@@ -205,8 +204,6 @@
             padding: 20px;
             margin-top: 20px;
             text-align: center;
-            border: 2px solid var(--primary-color);
-            box-shadow: 0 0 10px rgba(98, 0, 238, 0.2);
         }
         .achievements h2 {
             color: var(--primary-color);
@@ -219,25 +216,9 @@
         }
         .achievement-item {
             margin: 10px;
-            padding: 20px;
+            padding: 10px;
             background-color: var(--background-color);
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .achievement-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-        .achievement-item i {
-            font-size: 2.5em;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-        .achievement-item .count {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: var(--primary-color);
+            border-radius: 5px;
         }
         .advertisement {
             background-color: var(--secondary-color);
@@ -262,19 +243,7 @@
             to { opacity: 1; }
         }
         .fade-in {
-            opacity: 0;
-            transition: opacity 0.5s ease-in;
-        }
-        .fade-in.visible {
-            opacity: 1;
-        }
-        .animated-text::after {
-            content: '|';
-            animation: blink 0.7s infinite;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+            animation: fadeIn 0.5s ease-in;
         }
         @media (max-width: 768px) {
             .grid {
@@ -317,17 +286,17 @@
                 <p>Discover amazing products, earn rewards, and enjoy exclusive deals!</p>
                 <a href="#" id="get-started-button" class="button"><i class="fas fa-rocket"></i> Get Started</a>
                 <div class="feature-cards">
-                    <div class="feature-card fade-in">
+                    <div class="feature-card">
                         <h3><i class="fas fa-gift"></i> Earn Rewards</h3>
-                        <p class="animated-text"></p>
+                        <p>Collect points for every purchase and redeem them for amazing rewards.</p>
                     </div>
-                    <div class="feature-card fade-in">
+                    <div class="feature-card">
                         <h3><i class="fas fa-tag"></i> Exclusive Offers</h3>
-                        <p class="animated-text"></p>
+                        <p>Get access to special deals and promotions available only to Loot members.</p>
                     </div>
-                    <div class="feature-card fade-in">
+                    <div class="feature-card">
                         <h3><i class="fas fa-chart-line"></i> Grow Your Business</h3>
-                        <p class="animated-text"></p>
+                        <p>Leverage our platform to expand your customer base and increase sales.</p>
                     </div>
                 </div>
             </div>
@@ -335,20 +304,17 @@
             <div class="achievements fade-in">
                 <h2>Our Achievements</h2>
                 <div class="achievement-list">
-                    <div class="achievement-item fade-in">
-                        <i class="fas fa-users"></i>
-                        <div class="count" data-target="1000000">0</div>
-                        <p>Users</p>
+                    <div class="achievement-item">
+                        <i class="fas fa-users fa-2x"></i>
+                        <p>1M+ Users</p>
                     </div>
-                    <div class="achievement-item fade-in">
-                        <i class="fas fa-store"></i>
-                        <div class="count" data-target="10000">0</div>
-                        <p>Stores</p>
+                    <div class="achievement-item">
+                        <i class="fas fa-store fa-2x"></i>
+                        <p>10K+ Stores</p>
                     </div>
-                    <div class="achievement-item fade-in">
-                        <i class="fas fa-gift"></i>
-                        <div class="count" data-target="5000000">0</div>
-                        <p>Rewards Given</p>
+                    <div class="achievement-item">
+                        <i class="fas fa-gift fa-2x"></i>
+                        <p>5M+ Rewards Given</p>
                     </div>
                 </div>
             </div>
@@ -380,7 +346,7 @@
             <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
         </div>
 
-        <div id="signup-form"class="main-content hidden fade-in">
+        <div id="signup-form" class="main-content hidden fade-in">
             <h2>Sign Up</h2>
             <form id="signup-form">
                 <input type="text" id="signup-name" placeholder="Name" required>
@@ -488,61 +454,6 @@
         const getStartedButton = document.getElementById('get-started-button');
         const logo = document.getElementById('logo');
         const views = ['explore', 'loot', 'shop', 'rewards', 'account'];
-
-        // Animated text for feature cards
-        const animatedTexts = document.querySelectorAll('.animated-text');
-        const texts = [
-            "Collect points for every purchase and redeem them for amazing rewards.",
-            "Get access to special deals and promotions available only to Loot members.",
-            "Leverage our platform to expand your customer base and increase sales."
-        ];
-
-        function animateText(element, text) {
-            let index = 0;
-            element.textContent = '';
-            const interval = setInterval(() => {
-                if (index < text.length) {
-                    element.textContent += text[index];
-                    index++;
-                } else {
-                    clearInterval(interval);
-                    element.classList.remove('animated-text');
-                }
-            }, 50);
-        }
-
-        // Animate achievement numbers
-        function animateCounter(counter) {
-            const target = +counter.getAttribute('data-target');
-            const count = +counter.innerText;
-            const increment = target / 200;
-
-            if (count < target) {
-                counter.innerText = Math.ceil(count + increment);
-                setTimeout(() => animateCounter(counter), 1);
-            } else {
-                counter.innerText = target.toLocaleString();
-            }
-        }
-
-        // Intersection Observer for animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    if (entry.target.classList.contains('animated-text')) {
-                        animateText(entry.target, texts[Array.from(animatedTexts).indexOf(entry.target)]);
-                    } else if (entry.target.classList.contains('count')) {
-                        animateCounter(entry.target);
-                    }
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-        animatedTexts.forEach(text => observer.observe(text));
-        document.querySelectorAll('.count').forEach(counter => observer.observe(counter));
 
         // Firebase Auth
         firebase.auth().onAuthStateChanged((user) => {
@@ -691,7 +602,6 @@
                         </div>
                     `;
                     productsGrid.appendChild(productCard);
-                    observer.observe(productCard);
                 });
             });
         }
@@ -713,7 +623,6 @@
                         </div>
                     `;
                     offerCardsGrid.appendChild(card);
-                    observer.observe(card);
                 });
             });
         }
@@ -741,7 +650,6 @@
                     </div>
                 `;
                 rewardsGrid.appendChild(card);
-                observer.observe(card);
             });
         }
 
