@@ -108,7 +108,6 @@
         margin-bottom: 20px;
         overflow: hidden;
         transition: transform 0.3s, box-shadow 0.3s;
-        text-align: center;
     }
     .card:hover {
         transform: translateY(-5px);
@@ -149,7 +148,7 @@
         display: flex;
         flex-direction: column;
     }
-    input, textarea {
+    input, textarea, select {
         margin-bottom: 15px;
         padding: 10px;
         border: 1px solid #ddd;
@@ -186,7 +185,6 @@
         flex-basis: calc(33.333% - 20px);
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         transition: transform 0.3s, box-shadow 0.3s;
-        text-align: center;
     }
     .feature-card:hover {
         transform: translateY(-5px);
@@ -266,6 +264,14 @@
     .fade-in.visible {
         opacity: 1;
         transform: translateY(0);
+    }
+    .edit-profile {
+        cursor: pointer;
+        color: var(--primary-color);
+        margin-left: 10px;
+    }
+    .profile-type-selection {
+        margin-bottom: 20px;
     }
     @media (max-width: 768px) {
         .container {
@@ -406,14 +412,32 @@
         </div>
 
         <div id="shop" class="main-content hidden fade-in">
-            <h2><i class="fas fa-store"></i> Upload Product</h2>
-            <form id="upload-product-form">
-                <input type="text" id="product-name" placeholder="Product Name" required>
-                <textarea id="product-description" placeholder="Description" required></textarea>
-                <input type="file" id="product-video" accept="video/*" required>
-                <input type="url" id="product-link" placeholder="Product Link" required>
-                <button type="submit" class="button"><i class="fas fa-upload"></i> Upload Product</button>
-            </form>
+            <h2><i class="fas fa-store"></i> Shop Management</h2>
+            <div class="card">
+                <div class="card-content">
+                    <h3>Upload Product</h3>
+                    <form id="upload-product-form">
+                        <input type="text" id="product-name" placeholder="Product Name" required>
+                        <textarea id="product-description" placeholder="Description" required></textarea>
+                        <input type="file" id="product-video" accept="video/*" required>
+                        <input type="url" id="product-link" placeholder="Product Link" required>
+                        <button type="submit" class="button"><i class="fas fa-upload"></i> Upload Product</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <h3>Upload Offer</h3>
+                    <form id="upload-offer-form">
+                        <input type="text" id="offer-name" placeholder="Offer Name" required>
+                        <textarea id="offer-description" placeholder="Offer Description" required></textarea>
+                        <input type="number" id="offer-discount" placeholder="Discount Percentage" min="0" max="100" required>
+                        <input type="date" id="offer-expiry" placeholder="Expiry Date" required>
+                        <input type="file" id="offer-image" accept="image/*" required>
+                        <button type="submit" class="button"><i class="fas fa-tag"></i> Upload Offer</button>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <div id="rewards" class="main-content hidden fade-in">
@@ -422,8 +446,34 @@
         </div>
 
         <div id="account" class="main-content hidden fade-in">
-            <h2><i class="fas fa-user"></i> Account</h2>
-            <p><strong>Email:</strong> <span id="account-email"></span></p>
+            <h2><i class="fas fa-user"></i> Account <span class="edit-profile" id="edit-profile"><i class="fas fa-edit"></i></span></h2>
+            <div id="profile-info">
+                <p><strong>Email:</strong> <span id="account-email"></span></p>
+                <p><strong>Profile Type:</strong> <span id="profile-type">Not Set</span></p>
+            </div>
+            <div id="profile-edit" class="hidden">
+                <div class="profile-type-selection">
+                    <h3>Select Profile Type:</h3>
+                    <select id="profile-type-select">
+                        <option value="buyer">Buyer</option>
+                        <option value="seller">Seller</option>
+                    </select>
+                </div>
+                <form id="buyer-form" class="hidden">
+                    <input type="text" id="buyer-name" placeholder="Full Name" required>
+                    <input type="tel" id="buyer-phone" placeholder="Phone Number" required>
+                    <input type="text" id="buyer-address" placeholder="Shipping Address" required>
+                    <button type="submit" class="button">Save Buyer Profile</button>
+                </form>
+                <form id="seller-form" class="hidden">
+                    <input type="text" id="seller-name" placeholder="Business Name" required>
+                    <input type="tel" id="seller-phone" placeholder="Business Phone" required>
+                    <input type="text" id="seller-address" placeholder="Business Address" required>
+                    <input type="text" id="seller-tax-id" placeholder="Tax ID" required>
+                    <textarea id="seller-description" placeholder="Business Description" required></textarea>
+                    <button type="submit" class="button">Save Seller Profile</button>
+                </form>
+            </div>
             <div>
                 <h3>My Box</h3>
                 <div class="card">
@@ -462,6 +512,7 @@
     const firebaseConfig = {
         apiKey: "AIzaSyClf6W3B2nesvjfZtRSMcjbt6NRp6uy-Po",
         authDomain: "lootbase-4d01f.firebaseapp.com",
+        databaseURL: "https://lootbase-4d01f-default-rtdb.firebaseio.com",
         projectId: "lootbase-4d01f",
         storageBucket: "lootbase-4d01f.appspot.com",
         messagingSenderId: "350264696657",
@@ -487,9 +538,16 @@
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
     const uploadProductForm = document.getElementById('upload-product-form');
+    const uploadOfferForm = document.getElementById('upload-offer-form');
     const viewButtons = document.querySelectorAll('[data-view]');
     const getStartedButton = document.getElementById('get-started-button');
     const logo = document.getElementById('logo');
+    const editProfileButton = document.getElementById('edit-profile');
+    const profileInfo = document.getElementById('profile-info');
+    const profileEdit = document.getElementById('profile-edit');
+    const profileTypeSelect = document.getElementById('profile-type-select');
+    const buyerForm = document.getElementById('buyer-form');
+    const sellerForm = document.getElementById('seller-form');
     const views = ['explore', 'loot', 'shop', 'rewards', 'account'];
 
     // Animate achievement numbers
@@ -532,6 +590,7 @@
             loadProducts();
             loadOfferCards();
             loadRewards();
+            loadUserProfile();
         } else {
             userEmailSpan.textContent = '';
             accountEmailSpan.textContent = '';
@@ -597,12 +656,12 @@
         const email = document.getElementById('signup-email').value;
         const password = document.getElementById('signup-password').value;
         firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then((userCredential) =>
-                firebase.database().ref('users/' + userCredential.user.uid).set({
+            .then((userCredential) => {
+                return firebase.database().ref('users/' + userCredential.user.uid).set({
                     name: name,
                     email: email
-                })
-            )
+                });
+            })
             .then(() => {
                 signupFormDiv.classList.add('hidden');
                 document.getElementById('explore').classList.remove('hidden');
@@ -645,6 +704,42 @@
         }
     });
 
+    uploadOfferForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('offer-name').value;
+        const description = document.getElementById('offer-description').value;
+        const discount = document.getElementById('offer-discount').value;
+        const expiry = document.getElementById('offer-expiry').value;
+        const image = document.getElementById('offer-image').files[0];
+        
+        const user = firebase.auth().currentUser;
+        if (user) {
+            const fileName = `${name}_${Date.now()}.jpg`;
+            const storageRef = firebase.storage().ref('offerImages/' + fileName);
+            
+            storageRef.put(image).then(() => {
+                return storageRef.getDownloadURL();
+            }).then((imageUrl) => {
+                return firebase.database().ref('OfferCards').push({
+                    name: name,
+                    description: description,
+                    discount: discount,
+                    expiry: expiry,
+                    imageUrl: imageUrl,
+                });
+            }).then(() => {
+                alert('Offer uploaded successfully!');
+                uploadOfferForm.reset();
+                loadOfferCards();
+            }).catch((error) => {
+                console.error('Error uploading offer:', error);
+                alert('Failed to upload offer. Please try again.');
+            });
+        } else {
+            alert('Please log in to upload an offer.');
+        }
+    });
+
     viewButtons.forEach(button => {
         button.addEventListener('click', () => {
             const view = button.getAttribute('data-view');
@@ -656,6 +751,65 @@
             landingDiv.classList.add('hidden');
             sidebar.classList.remove('open');
         });
+    });
+
+    editProfileButton.addEventListener('click', () => {
+        profileInfo.classList.toggle('hidden');
+        profileEdit.classList.toggle('hidden');
+    });
+
+    profileTypeSelect.addEventListener('change', () => {
+        if (profileTypeSelect.value === 'buyer') {
+            buyerForm.classList.remove('hidden');
+            sellerForm.classList.add('hidden');
+        } else {
+            buyerForm.classList.add('hidden');
+            sellerForm.classList.remove('hidden');
+        }
+    });
+
+    buyerForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const user = firebase.auth().currentUser;
+        if (user) {
+            firebase.database().ref('users/' + user.uid).update({
+                profileType: 'buyer',
+                name: document.getElementById('buyer-name').value,
+                phone: document.getElementById('buyer-phone').value,
+                address: document.getElementById('buyer-address').value
+            }).then(() => {
+                alert('Buyer profile updated successfully!');
+                loadUserProfile();
+                profileInfo.classList.remove('hidden');
+                profileEdit.classList.add('hidden');
+            }).catch((error) => {
+                console.error('Error updating profile:', error);
+                alert('Failed to update profile. Please try again.');
+            });
+        }
+    });
+
+    sellerForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const user = firebase.auth().currentUser;
+        if (user) {
+            firebase.database().ref('users/' + user.uid).update({
+                profileType: 'seller',
+                businessName: document.getElementById('seller-name').value,
+                businessPhone: document.getElementById('seller-phone').value,
+                businessAddress: document.getElementById('seller-address').value,
+                taxId: document.getElementById('seller-tax-id').value,
+                businessDescription: document.getElementById('seller-description').value
+            }).then(() => {
+                alert('Seller profile updated successfully!');
+                loadUserProfile();
+                profileInfo.classList.remove('hidden');
+                profileEdit.classList.add('hidden');
+            }).catch((error) => {
+                console.error('Error updating profile:', error);
+                alert('Failed to update profile. Please try again.');
+            });
+        }
     });
 
     function loadProducts() {
@@ -689,10 +843,12 @@
                 const card = document.createElement('div');
                 card.className = 'card fade-in';
                 card.innerHTML = `
-                    <img src="${offerCard.imageUrl}" alt="${offerCard.productName}" class="card-image">
+                    <img src="${offerCard.imageUrl}" alt="${offerCard.name}" class="card-image">
                     <div class="card-content">
-                        <h3>${offerCard.productName}</h3>
-                        <p>${offerCard.offerPercentage}% OFF</p>
+                        <h3>${offerCard.name}</h3>
+                        <p>${offerCard.description}</p>
+                        <p>${offerCard.discount}% OFF</p>
+                        <p>Expires: ${offerCard.expiry}</p>
                         <button class="button"><i class="fas fa-tag"></i> Claim Offer</button>
                     </div>
                 `;
@@ -727,6 +883,29 @@
             rewardsGrid.appendChild(card);
             observer.observe(card);
         });
+    }
+
+    function loadUserProfile() {
+        const user = firebase.auth().currentUser;
+        if (user) {
+            firebase.database().ref('users/' + user.uid).once('value').then((snapshot) => {
+                const userData = snapshot.val();
+                if (userData) {
+                    document.getElementById('profile-type').textContent = userData.profileType || 'Not Set';
+                    if (userData.profileType === 'buyer') {
+                        document.getElementById('buyer-name').value = userData.name || '';
+                        document.getElementById('buyer-phone').value = userData.phone || '';
+                        document.getElementById('buyer-address').value = userData.address || '';
+                    } else if (userData.profileType === 'seller') {
+                        document.getElementById('seller-name').value = userData.businessName || '';
+                        document.getElementById('seller-phone').value = userData.businessPhone || '';
+                        document.getElementById('seller-address').value = userData.businessAddress || '';
+                        document.getElementById('seller-tax-id').value = userData.taxId || '';
+                        document.getElementById('seller-description').value = userData.businessDescription || '';
+                    }
+                }
+            });
+        }
     }
 
     // Initial load
