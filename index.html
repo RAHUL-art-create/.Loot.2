@@ -7,499 +7,656 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-    :root {
-        --primary-color: #6200EE;
-        --secondary-color: #03DAC6;
-        --text-color: #333333;
-        --background-color: #f4f4f4;
-        --card-color: #ffffff;
-    }
-    body {
-        font-family: 'Poppins', sans-serif;
-        margin: 0;
-        padding: 0;
-        background: var(--background-color);
-        color: var(--text-color);
-        min-height: 100vh;
-    }
+:root {
+    --primary-color: #6200EE;
+    --secondary-color: #03DAC6;
+    --text-color: #333333;
+    --background-color: #f4f4f4;
+    --card-color: #ffffff;
+}
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--background-color);
+    color: var(--text-color);
+    min-height: 100vh;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.hidden {
+    display: none;
+}
+.header {
+    background-color: var(--primary-color);
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: var(--card-color);
+}
+.logo {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+.sidebar {
+    background-color: var(--card-color);
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    height: 100%;
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+.sidebar.open {
+    left: 0;
+}
+.sidebar-content {
+    padding: 20px;
+}
+.sidebar-content button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    border-radius: 5px;
+}
+.sidebar-content button:hover {
+    background-color: var(--primary-color);
+    color: var(--card-color);
+    transform: translateX(5px);
+}
+.main-content {
+    background-color: var(--card-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.main-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+.card {
+    background-color: var(--card-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+.card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+.card-content {
+    padding: 20px;
+}
+.button {
+    background-color: var(--primary-color);
+    color: var(--card-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-block;
+    text-decoration: none;
+}
+.button:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.05);
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+form {
+    display: flex;
+    flex-direction: column;
+}
+input, textarea, select {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.landing {
+    text-align: center;
+    padding: 50px 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--card-color);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.landing h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+.landing p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+.feature-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+.feature-card {
+    background-color: var(--card-color);
+    border-radius: 10px;
+    padding: 20px;
+    flex-basis: calc(33.333% - 20px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+.feature-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+.feature-card p {
+    color: var(--text-color);
+    min-height: 3em;
+}
+.achievements {
+    background-color: var(--card-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 10px rgba(98, 0, 238, 0.2);
+}
+.achievements h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+.achievement-list {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.achievement-item {
+    margin: 10px;
+    padding: 20px;
+    background-color: var(--background-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.achievement-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+.achievement-item i {
+    font-size: 2.5em;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+.achievement-item .count {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+.advertisement {
+    background-color: var(--secondary-color);
+    color: var(--card-color);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: center;
+}
+.future-insights {
+    background-color: var(--card-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+}
+.future-insights h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.edit-profile {
+    cursor: pointer;
+    color: var(--primary-color);
+    margin-left: 10px;
+}
+.profile-type-selection {
+    margin-bottom: 20px;
+}
+.explore-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.search-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    font-size: 16px;
+    transition: box-shadow 0.3s;
+}
+.search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(98, 0, 238, 0.3);
+}
+.reels-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    z-index: 2000;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+}
+.reel-item {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.reel-video-container {
+    position: relative;
+    width: 100%;
+    max-width: 315px;
+    height: 560px;
+    border-radius: 15px;
+    overflow: hidden;
+}
+.reel-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.reel-content {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+.reel-actions {
+    position: absolute;
+    right: 20px;
+    bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.reel-action-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+}
+.reel-action-button:hover {
+    color: var(--secondary-color);
+    transform: scale(1.1);
+}
+.reel-action-button.active {
+    color: var(--secondary-color);
+}
+.reel-comments {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.5);
+    color: #fff;
+    padding: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+    transition: transform 0.3s ease-out;
+    transform: translateY(100%);
+}
+.reel-comments.show {
+    transform: translateY(0);
+}
+.close-reels {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 2001;
+}
+.comment-form {
+    display: flex;
+    margin-top: 10px;
+}
+.comment-input {
+    flex-grow: 1;
+    padding: 5px 10px;
+    border: 1px solid #fff;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+.comment-submit {
+    background-color: var(--secondary-color);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+@media (max-width: 768px) {
     .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    .hidden {
-        display: none;
-    }
-    .header {
-        background-color: var(--primary-color);
-        padding: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-    }
-    .header h1 {
-        margin: 0;
-        font-size: 24px;
-        color: var(--card-color);
-    }
-    .logo {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-    .logo img {
-        height: 40px;
-        margin-right: 10px;
-    }
-    .sidebar {
-        background-color: var(--card-color);
-        width: 250px;
-        position: fixed;
-        top: 0;
-        left: -250px;
-        height: 100%;
-        transition: left 0.3s ease-in-out;
-        z-index: 1000;
-        box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-    }
-    .sidebar.open {
-        left: 0;
-    }
-    .sidebar-content {
-        padding: 20px;
-    }
-    .sidebar-content button {
-        display: block;
-        width: 100%;
         padding: 10px;
-        margin-bottom: 10px;
-        background-color: transparent;
-        border: none;
-        text-align: left;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.3s;
-        border-radius: 5px;
-    }
-    .sidebar-content button:hover {
-        background-color: var(--primary-color);
-        color: var(--card-color);
-        transform: translateX(5px);
-    }
-    .main-content {
-        background-color: var(--card-color);
-        border-radius: 10px;
-        padding: 20px;
-        margin-top: 20px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .main-content:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
-    .card {
-        background-color: var(--card-color);
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
-        overflow: hidden;
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
-    .card-image {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-    }
-    .card-content {
-        padding: 20px;
-    }
-    .button {
-        background-color: var(--primary-color);
-        color: var(--card-color);
-        border: none;
-        padding: 10px 20px;
-        border-radius: 25px;
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.3s;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        display: inline-block;
-        text-decoration: none;
-    }
-    .button:hover {
-        background-color: var(--secondary-color);
-        transform: scale(1.05);
     }
     .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 20px;
-    }
-    form {
-        display: flex;
-        flex-direction: column;
-    }
-    input, textarea, select {
-        margin-bottom: 15px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 16px;
-    }
-    .landing {
-        text-align: center;
-        padding: 50px 0;
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        color: var(--card-color);
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
-    .landing h2 {
-        font-size: 36px;
-        margin-bottom: 20px;
-    }
-    .landing p {
-        font-size: 18px;
-        margin-bottom: 30px;
-    }
-    .feature-cards {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-        margin-top: 30px;
+        grid-template-columns: 1fr;
     }
     .feature-card {
-        background-color: var(--card-color);
-        border-radius: 10px;
-        padding: 20px;
-        flex-basis: calc(33.333% - 20px);
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: transform 0.3s, box-shadow 0.3s;
+        flex-basis: 100%;
     }
-    .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    .landing h2 {
+        font-size: 28px;
     }
-    .feature-card h3 {
-        color: var(--primary-color);
-        margin-bottom: 10px;
-    }
-    .feature-card p {
-        color: var(--text-color);
-        min-height: 3em;
-    }
-    .achievements {
-        background-color: var(--card-color);
-        border-radius: 10px;
-        padding: 20px;
-        margin-top: 20px;
-        text-align: center;
-        border: 2px solid var(--primary-color);
-        box-shadow: 0 0 10px rgba(98, 0, 238, 0.2);
-    }
-    .achievements h2 {
-        color: var(--primary-color);
-        margin-bottom: 20px;
-    }
-    .achievement-list {
-        display: flex;
-        justify-content: space-around;
-        flex-wrap: wrap;
+    .landing p {
+        font-size: 16px;
     }
     .achievement-item {
-        margin: 10px;
-        padding: 20px;
-        background-color: var(--background-color);
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: transform 0.3s, box-shadow 0.3s;
+        flex-basis: calc(50% - 20px);
     }
-    .achievement-item:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    .explore-header {
+        flex-direction: column;
+        align-items: stretch;
     }
-    .achievement-item i {
-        font-size: 2.5em;
-        color: var(--primary-color);
+    .search-container {
         margin-bottom: 10px;
     }
-    .achievement-item .count {
-        font-size: 1.5em;
-        font-weight: bold;
-        color: var(--primary-color);
-    }
-    .advertisement {
-        background-color: var(--secondary-color);
-        color: var(--card-color);
-        padding: 20px;
-        border-radius: 10px;
-        margin-top: 20px;
-        text-align: center;
-    }
-    .future-insights {
-        background-color: var(--card-color);
-        border-radius: 10px;
-        padding: 20px;
-        margin-top: 20px;
-    }
-    .future-insights h2 {
-        color: var(--primary-color);
-        margin-bottom: 20px;
-    }
-    .fade-in {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-    }
-    .fade-in.visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    .edit-profile {
-        cursor: pointer;
-        color: var(--primary-color);
-        margin-left: 10px;
-    }
-    .profile-type-selection {
-        margin-bottom: 20px;
-    }
-    @media (max-width: 768px) {
-        .container {
-            padding: 10px;
-        }
-        .grid {
-            grid-template-columns: 1fr;
-        }
-        .feature-card {
-            flex-basis: 100%;
-        }
-        .landing h2 {
-            font-size: 28px;
-        }
-        .landing p {
-            font-size: 16px;
-        }
-        .achievement-item {
-            flex-basis: calc(50% - 20px);
-        }
-    }
+}
 </style>
 </head>
 <body>
 <div class="header">
-    <button id="sidebar-toggle" class="button"><i class="fas fa-bars"></i></button>
-    <div class="logo" id="logo">
-        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-UB3YwtY47FNZUa1OIU2nf5keC2qrB8.png" alt="Loot Logo">
-        <h1>Loot</h1>
-    </div>
-    <span id="user-email"></span>
+<button id="sidebar-toggle" class="button"><i class="fas fa-bars"></i></button>
+<div class="logo" id="logo">
+    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-UB3YwtY47FNZUa1OIU2nf5keC2qrB8.png" alt="Loot Logo">
+    <h1>Loot</h1>
+</div>
+<span id="user-email"></span>
 </div>
 
 <div class="sidebar" id="sidebar">
-    <div class="sidebar-content">
-        <button id="close-sidebar"><i class="fas fa-times"></i></button>
-        <h2>Menu</h2>
-        <button data-view="explore"><i class="fas fa-search"></i> Explore</button>
-        <button data-view="loot"><i class="fas fa-gift"></i> Loot</button>
-        <button data-view="shop"><i class="fas fa-store"></i> Shop</button>
-        <button data-view="rewards"><i class="fas fa-trophy"></i> Rewards</button>
-        <button data-view="account"><i class="fas fa-user"></i> Account</button>
-        <button id="login-button"><i class="fas fa-sign-in-alt"></i> Login / Sign Up</button>
-        <button id="logout-button" class="hidden"><i class="fas fa-sign-out-alt"></i> Logout</button>
-    </div>
+<div class="sidebar-content">
+    <button id="close-sidebar"><i class="fas fa-times"></i></button>
+    <h2>Menu</h2>
+    <button data-view="explore"><i class="fas fa-search"></i> Explore</button>
+    <button data-view="loot"><i class="fas fa-gift"></i>Loot</button>
+    <button data-view="shop"><i class="fas fa-store"></i> Shop</button>
+    <button data-view="rewards"><i class="fas fa-trophy"></i> Rewards</button>
+    <button data-view="account"><i class="fas fa-user"></i> Account</button>
+    <button id="login-button"><i class="fas fa-sign-in-alt"></i> Login / Sign Up</button>
+    <button id="logout-button" class="hidden"><i class="fas fa-sign-out-alt"></i> Logout</button>
+</div>
 </div>
 
 <div class="container">
-    <div id="landing">
-        <div class="landing fade-in">
-            <h2>Welcome to Loot</h2>
-            <p>Discover amazing products, earn rewards, and enjoy exclusive deals!</p>
-            <a href="#" id="get-started-button" class="button"><i class="fas fa-rocket"></i> Get Started</a>
-            <div class="feature-cards">
-                <div class="feature-card fade-in">
-                    <h3><i class="fas fa-gift"></i> Earn Rewards</h3>
-                    <p>Collect points for every purchase and redeem them for amazing rewards.</p>
-                </div>
-                <div class="feature-card fade-in">
-                    <h3><i class="fas fa-tag"></i> Exclusive Offers</h3>
-                    <p>Get access to special deals and promotions available only to Loot members.</p>
-                </div>
-                <div class="feature-card fade-in">
-                    <h3><i class="fas fa-chart-line"></i> Grow Your Business</h3>
-                    <p>Leverage our platform to expand your customer base and increase sales.</p>
-                </div>
+<div id="landing">
+    <div class="landing fade-in">
+        <h2>Welcome to Loot</h2>
+        <p>Discover amazing products, earn rewards, and enjoy exclusive deals!</p>
+        <a href="#" id="get-started-button" class="button"><i class="fas fa-rocket"></i> Get Started</a>
+        <div class="feature-cards">
+            <div class="feature-card fade-in">
+                <h3><i class="fas fa-gift"></i> Earn Rewards</h3>
+                <p>Collect points for every purchase and redeem them for amazing rewards.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <h3><i class="fas fa-tag"></i> Exclusive Offers</h3>
+                <p>Get access to special deals and promotions available only to Loot members.</p>
+            </div>
+            <div class="feature-card fade-in">
+                <h3><i class="fas fa-chart-line"></i> Grow Your Business</h3>
+                <p>Leverage our platform to expand your customer base and increase sales.</p>
             </div>
         </div>
+    </div>
 
-        <div class="achievements fade-in">
-            <h2>Our Achievements</h2>
-            <div class="achievement-list">
-                <div class="achievement-item fade-in">
-                    <i class="fas fa-users"></i>
-                    <div class="count" data-target="1000000">0</div>
-                    <p>Users</p>
-                </div>
-                <div class="achievement-item fade-in">
-                    <i class="fas fa-store"></i>
-                    <div class="count" data-target="10000">0</div>
-                    <p>Stores</p>
-                </div>
-                <div class="achievement-item fade-in">
-                    <i class="fas fa-gift"></i>
-                    <div class="count" data-target="5000000">0</div>
-                    <p>Rewards Given</p>
-                </div>
+    <div class="achievements fade-in">
+        <h2>Our Achievements</h2>
+        <div class="achievement-list">
+            <div class="achievement-item fade-in">
+                <i class="fas fa-users"></i>
+                <div class="count" data-target="1000000">0</div>
+                <p>Users</p>
+            </div>
+            <div class="achievement-item fade-in">
+                <i class="fas fa-store"></i>
+                <div class="count" data-target="10000">0</div>
+                <p>Stores</p>
+            </div>
+            <div class="achievement-item fade-in">
+                <i class="fas fa-gift"></i>
+                <div class="count" data-target="5000000">0</div>
+                <p>Rewards Given</p>
             </div>
         </div>
-
-        <div class="advertisement fade-in">
-            <h2>Limited Time Offer!</h2>
-            <p>Sign up now and get 500 bonus points to kickstart your rewards journey!</p>
-            <a href="#" class="button">Claim Now</a>
-        </div>
-
-        <div class="future-insights fade-in">
-            <h2>Coming Soon</h2>
-            <ul>
-                <li>Mobile App for iOS and Android</li>
-                <li>Integration with major e-commerce platforms</li>
-                <li>Personalized AI-powered recommendations</li>
-                <li>Virtual Reality shopping experience</li>
-            </ul>
-        </div>
     </div>
 
-    <div id="login-signup" class="main-content hidden fade-in">
-        <h2>Sign In</h2>
-        <form id="login-form">
-            <input type="email" id="login-email" placeholder="Email" required>
-            <input type="password" id="login-password" placeholder="Password" required>
-            <button type="submit" class="button"><i class="fas fa-sign-in-alt"></i> Login</button>
-        </form>
-        <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+    <div class="advertisement fade-in">
+        <h2>Limited Time Offer!</h2>
+        <p>Sign up now and get 500 bonus points to kickstart your rewards journey!</p>
+        <a href="#" class="button">Claim Now</a>
     </div>
 
-    <div id="signup-form" class="main-content hidden fade-in">
-        <h2>Sign Up</h2>
-        <form id="signup-form">
-            <input type="text" id="signup-name" placeholder="Name" required>
-            <input type="email" id="signup-email" placeholder="Email" required>
-            <input type="password" id="signup-password" placeholder="Password" required>
-            <button type="submit" class="button"><i class="fas fa-user-plus"></i> Sign Up</button>
-        </form>
-        <p>Already have an account? <a href="#" id="show-login">Sign In</a></p>
+    <div class="future-insights fade-in">
+        <h2>Coming Soon</h2>
+        <ul>
+            <li>Mobile App for iOS and Android</li>
+            <li>Integration with major e-commerce platforms</li>
+            <li>Personalized AI-powered recommendations</li>
+            <li>Virtual Reality shopping experience</li>
+        </ul>
     </div>
+</div>
 
-    <div id="dashboard" class="hidden">
-        <div id="explore" class="main-content fade-in">
+<div id="login-signup" class="main-content hidden fade-in">
+    <h2>Sign In</h2>
+    <form id="login-form">
+        <input type="email" id="login-email" placeholder="Email" required>
+        <input type="password" id="login-password" placeholder="Password" required>
+        <button type="submit" class="button"><i class="fas fa-sign-in-alt"></i> Login</button>
+    </form>
+    <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+</div>
+
+<div id="signup-form" class="main-content hidden fade-in">
+    <h2>Sign Up</h2>
+    <form id="signup-form">
+        <input type="text" id="signup-name" placeholder="Name" required>
+        <input type="email" id="signup-email" placeholder="Email" required>
+        <input type="password" id="signup-password" placeholder="Password" required>
+        <button type="submit" class="button"><i class="fas fa-user-plus"></i> Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="#" id="show-login">Sign In</a></p>
+</div>
+
+<div id="dashboard" class="hidden">
+    <div id="explore" class="main-content fade-in">
+        <div class="explore-header">
             <h2><i class="fas fa-search"></i> Explore</h2>
-            <div id="products-grid" class="grid"></div>
-        </div>
-
-        <div id="loot" class="main-content hidden fade-in">
-            <h2><i class="fas fa-gift"></i> Loot Deals</h2>
-            <div id="offer-cards-grid" class="grid"></div>
-        </div>
-
-        <div id="shop" class="main-content hidden fade-in">
-            <h2><i class="fas fa-store"></i> Shop Management</h2>
-            <div class="card">
-                <div class="card-content">
-                    <h3>Upload Product</h3>
-                    <form id="upload-product-form">
-                        <input type="text" id="product-name" placeholder="Product Name" required>
-                        <textarea id="product-description" placeholder="Description" required></textarea>
-                        <input type="file" id="product-video" accept="video/*" required>
-                        <input type="url" id="product-link" placeholder="Product Link" required>
-                        <button type="submit" class="button"><i class="fas fa-upload"></i> Upload Product</button>
-                    </form>
-                </div>
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="Search products...">
             </div>
-            <div class="card">
-                <div class="card-content">
-                    <h3>Upload Offer</h3>
-                    <form id="upload-offer-form">
-                        <input type="text" id="offer-name" placeholder="Offer Name" required>
-                        <textarea id="offer-description" placeholder="Offer Description" required></textarea>
-                        <input type="number" id="offer-discount" placeholder="Discount Percentage" min="0" max="100" required>
-                        <input type="date" id="offer-expiry" placeholder="Expiry Date" required>
-                        <input type="file" id="offer-image" accept="image/*" required>
-                        <button type="submit" class="button"><i class="fas fa-tag"></i> Upload Offer</button>
-                    </form>
-                </div>
-            </div>
+            <button id="open-reels" class="button"><i class="fas fa-film"></i> View Reels</button>
         </div>
+        <div id="products-grid" class="grid"></div>
+    </div>
 
-        <div id="rewards" class="main-content hidden fade-in">
-            <h2><i class="fas fa-trophy"></i> Your Rewards</h2>
-            <div id="rewards-grid" class="grid"></div>
-        </div>
+    <div id="loot" class="main-content hidden fade-in">
+        <h2><i class="fas fa-gift"></i> Loot Deals</h2>
+        <div id="offer-cards-grid" class="grid"></div>
+    </div>
 
-        <div id="account" class="main-content hidden fade-in">
-            <h2><i class="fas fa-user"></i> Account <span class="edit-profile" id="edit-profile"><i class="fas fa-edit"></i></span></h2>
-            <div id="profile-info">
-                <p><strong>Email:</strong> <span id="account-email"></span></p>
-                <p><strong>Profile Type:</strong> <span id="profile-type">Not Set</span></p>
-            </div>
-            <div id="profile-edit" class="hidden">
-                <div class="profile-type-selection">
-                    <h3>Select Profile Type:</h3>
-                    <select id="profile-type-select">
-                        <option value="buyer">Buyer</option>
-                        <option value="seller">Seller</option>
-                    </select>
-                </div>
-                <form id="buyer-form" class="hidden">
-                    <input type="text" id="buyer-name" placeholder="Full Name" required>
-                    <input type="tel" id="buyer-phone" placeholder="Phone Number" required>
-                    <input type="text" id="buyer-address" placeholder="Shipping Address" required>
-                    <button type="submit" class="button">Save Buyer Profile</button>
-                </form>
-                <form id="seller-form" class="hidden">
-                    <input type="text" id="seller-name" placeholder="Business Name" required>
-                    <input type="tel" id="seller-phone" placeholder="Business Phone" required>
-                    <input type="text" id="seller-address" placeholder="Business Address" required>
-                    <input type="text" id="seller-tax-id" placeholder="Tax ID" required>
-                    <textarea id="seller-description" placeholder="Business Description" required></textarea>
-                    <button type="submit" class="button">Save Seller Profile</button>
+    <div id="shop" class="main-content hidden fade-in">
+        <h2><i class="fas fa-store"></i> Shop Management</h2>
+        <div class="card">
+            <div class="card-content">
+                <h3>Upload Product</h3>
+                <form id="upload-product-form">
+                    <input type="text" id="product-name" placeholder="Product Name" required>
+                    <textarea id="product-description" placeholder="Description" required></textarea>
+                    <input type="file" id="product-video" accept="video/*" required>
+                    <input type="url" id="product-link" placeholder="Product Link" required>
+                    <button type="submit" class="button"><i class="fas fa-upload"></i> Upload Product</button>
                 </form>
             </div>
-            <div>
-                <h3>My Box</h3>
-                <div class="card">
-                    <div class="card-content">
-                        <h4><i class="fas fa-mobile-alt"></i> Apps</h4>
-                        <p>Manage your favorite mobile applications and discover new ones.</p>
-                        <button class="button">Manage Apps</button>
-                    </div>
+        </div>
+        <div class="card">
+            <div class="card-content">
+                <h3>Upload Offer</h3>
+                <form id="upload-offer-form">
+                    <input type="text" id="offer-name" placeholder="Offer Name" required>
+                    <textarea id="offer-description" placeholder="Offer Description" required></textarea>
+                    <input type="number" id="offer-discount" placeholder="Discount Percentage" min="0" max="100" required>
+                    <input type="date" id="offer-expiry" placeholder="Expiry Date" required>
+                    <input type="file" id="offer-image" accept="image/*" required>
+                    <button type="submit" class="button"><i class="fas fa-tag"></i> Upload Offer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="rewards" class="main-content hidden fade-in">
+        <h2><i class="fas fa-trophy"></i> Your Rewards</h2>
+        <div id="rewards-grid" class="grid"></div>
+    </div>
+
+    <div id="account" class="main-content hidden fade-in">
+        <h2><i class="fas fa-user"></i> Account <span class="edit-profile" id="edit-profile"><i class="fas fa-edit"></i></span></h2>
+        <div id="profile-info">
+            <p><strong>Email:</strong> <span id="account-email"></span></p>
+            <p><strong>Profile Type:</strong> <span id="profile-type">Not Set</span></p>
+        </div>
+        <div id="profile-edit" class="hidden">
+            <div class="profile-type-selection">
+                <h3>Select Profile Type:</h3>
+                <select id="profile-type-select">
+                    <option value="buyer">Buyer</option>
+                    <option value="seller">Seller</option>
+                </select>
+            </div>
+            <form id="buyer-form" class="hidden">
+                <input type="text" id="buyer-name" placeholder="Full Name" required>
+                <input type="tel" id="buyer-phone" placeholder="Phone Number" required>
+                <input type="text" id="buyer-address" placeholder="Shipping Address" required>
+                <button type="submit" class="button">Save Buyer Profile</button>
+            </form>
+            <form id="seller-form" class="hidden">
+                <input type="text" id="seller-name" placeholder="Business Name" required>
+                <input type="tel" id="seller-phone" placeholder="Business Phone" required>
+                <input type="text" id="seller-address" placeholder="Business Address" required>
+                <input type="text" id="seller-tax-id" placeholder="Tax ID" required>
+                <textarea id="seller-description" placeholder="Business Description" required></textarea>
+                <button type="submit" class="button">Save Seller Profile</button>
+            </form>
+        </div>
+        <div>
+            <h3>My Box</h3>
+            <div class="card">
+                <div class="card-content">
+                    <h4><i class="fas fa-mobile-alt"></i> Apps</h4>
+                    <p>Manage your favorite mobile applications and discover new ones.</p>
+                    <button class="button">Manage Apps</button>
                 </div>
-                <div class="card">
-                    <div class="card-content">
-                        <h4><i class="fas fa-globe"></i> Web</h4>
-                        <p>Explore and organize your preferred web-based services and tools.</p>
-                        <button class="button">Manage Web Services</button>
-                    </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <h4><i class="fas fa-globe"></i> Web</h4>
+                    <p>Explore and organize your preferred web-based services and tools.</p>
+                    <button class="button">Manage Web Services</button>
                 </div>
-                <div class="card">
-                    <div class="card-content">
-                        <h4><i class="fas fa-box"></i> Items</h4>
-                        <p>Keep track of your physical products and manage your inventory.</p>
-                        <button class="button">Manage Items</button>
-                    </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <h4><i class="fas fa-box"></i> Items</h4>
+                    <p>Keep track of your physical products and manage your inventory.</p>
+                    <button class="button">Manage Items</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Reels container -->
+<div id="reels-container" class="reels-container hidden">
+    <button class="close-reels" id="close-reels"><i class="fas fa-times"></i></button>
+    <!-- Reel items will be dynamically added here -->
+</div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -508,410 +665,619 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
 <script>
-    // Initialize Firebase
-    const firebaseConfig = {
-        apiKey: "AIzaSyClf6W3B2nesvjfZtRSMcjbt6NRp6uy-Po",
-        authDomain: "lootbase-4d01f.firebaseapp.com",
-        databaseURL: "https://lootbase-4d01f-default-rtdb.firebaseio.com",
-        projectId: "lootbase-4d01f",
-        storageBucket: "lootbase-4d01f.appspot.com",
-        messagingSenderId: "350264696657",
-        appId: "1:350264696657:web:9af597da2f5fd2970d7d70",
-        measurementId: "G-YQK38EMPJK"
-    };
-    firebase.initializeApp(firebaseConfig);
+// Initialize Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyClf6W3B2nesvjfZtRSMcjbt6NRp6uy-Po",
+    authDomain: "lootbase-4d01f.firebaseapp.com",
+    databaseURL: "https://lootbase-4d01f-default-rtdb.firebaseio.com",
+    projectId: "lootbase-4d01f",
+    storageBucket: "lootbase-4d01f.appspot.com",
+    messagingSenderId: "350264696657",
+    appId: "1:350264696657:web:9af597da2f5fd2970d7d70",
+    measurementId: "G-YQK38EMPJK"
+};
+firebase.initializeApp(firebaseConfig);
 
-    // DOM Elements
-    const landingDiv = document.getElementById('landing');
-    const loginSignupDiv = document.getElementById('login-signup');
-    const signupFormDiv = document.getElementById('signup-form');
-    const dashboardDiv = document.getElementById('dashboard');
-    const userEmailSpan = document.getElementById('user-email');
-    const accountEmailSpan = document.getElementById('account-email');
-    const sidebar = document.getElementById('sidebar');
-    const sidebarToggle = document.getElementById('sidebar-toggle');
-    const closeSidebar = document.getElementById('close-sidebar');
-    const logoutButton = document.getElementById('logout-button');
-    const loginButton = document.getElementById('login-button');
-    const showSignupLink = document.getElementById('show-signup');
-    const showLoginLink = document.getElementById('show-login');
-    const loginForm = document.getElementById('login-form');
-    const signupForm = document.getElementById('signup-form');
-    const uploadProductForm = document.getElementById('upload-product-form');
-    const uploadOfferForm = document.getElementById('upload-offer-form');
-    const viewButtons = document.querySelectorAll('[data-view]');
-    const getStartedButton = document.getElementById('get-started-button');
-    const logo = document.getElementById('logo');
-    const editProfileButton = document.getElementById('edit-profile');
-    const profileInfo = document.getElementById('profile-info');
-    const profileEdit = document.getElementById('profile-edit');
-    const profileTypeSelect = document.getElementById('profile-type-select');
-    const buyerForm = document.getElementById('buyer-form');
-    const sellerForm = document.getElementById('seller-form');
-    const views = ['explore', 'loot', 'shop', 'rewards', 'account'];
+// DOM Elements
+const landingDiv = document.getElementById('landing');
+const loginSignupDiv = document.getElementById('login-signup');
+const signupFormDiv = document.getElementById('signup-form');
+const dashboardDiv = document.getElementById('dashboard');
+const userEmailSpan = document.getElementById('user-email');
+const accountEmailSpan = document.getElementById('account-email');
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebar-toggle');
+const closeSidebar = document.getElementById('close-sidebar');
+const logoutButton = document.getElementById('logout-button');
+const loginButton = document.getElementById('login-button');
+const showSignupLink = document.getElementById('show-signup');
+const showLoginLink = document.getElementById('show-login');
+const loginForm = document.getElementById('login-form');
+const signupForm = document.getElementById('signup-form');
+const uploadProductForm = document.getElementById('upload-product-form');
+const uploadOfferForm = document.getElementById('upload-offer-form');
+const viewButtons = document.querySelectorAll('[data-view]');
+const getStartedButton = document.getElementById('get-started-button');
+const logo = document.getElementById('logo');
+const editProfileButton = document.getElementById('edit-profile');
+const profileInfo = document.getElementById('profile-info');
+const profileEdit = document.getElementById('profile-edit');
+const profileTypeSelect = document.getElementById('profile-type-select');
+const buyerForm = document.getElementById('buyer-form');
+const sellerForm = document.getElementById('seller-form');
+const views = ['explore', 'loot', 'shop', 'rewards', 'account'];
+const openReelsButton = document.getElementById('open-reels');
+const reelsContainer = document.getElementById('reels-container');
+const closeReelsButton = document.getElementById('close-reels');
+const searchInput = document.getElementById('search-input');
 
-    // Animate achievement numbers
-    function animateCounter(counter) {
-        const target = +counter.getAttribute('data-target');
-        const count = +counter.innerText;
-        const increment = target / 200;
+// Animate achievement numbers
+function animateCounter(counter) {
+    const target = +counter.getAttribute('data-target');
+    const count = +counter.innerText;
+    const increment = target / 200;
 
-        if (count < target) {
-            counter.innerText = Math.ceil(count + increment);
-            setTimeout(() => animateCounter(counter), 1);
-        } else {
-            counter.innerText = target.toLocaleString();
-        }
+    if (count < target) {
+        counter.innerText = Math.ceil(count + increment);
+        setTimeout(() => animateCounter(counter), 1);
+    } else {
+        counter.innerText = target.toLocaleString();
     }
+}
 
-    // Intersection Observer for animations
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                if (entry.target.classList.contains('count')) {
-                    animateCounter(entry.target);
-                }
-                observer.unobserve(entry.target);
+// Intersection Observer for animations
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            if (entry.target.classList.contains('count')) {
+                animateCounter(entry.target);
             }
-        });
-    }, { threshold: 0.1 });
-
-    // Observe all fade-in elements
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    // Firebase Auth
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            userEmailSpan.textContent = user.email;
-            accountEmailSpan.textContent = user.email;
-            loginButton.classList.add('hidden');
-            logoutButton.classList.remove('hidden');
-            loadProducts();
-            loadOfferCards();
-            loadRewards();
-            loadUserProfile();
-        } else {
-            userEmailSpan.textContent = '';
-            accountEmailSpan.textContent = '';
-            loginButton.classList.remove('hidden');
-            logoutButton.classList.add('hidden');
+            observer.unobserve(entry.target);
         }
     });
+}, { threshold: 0.1 });
 
-    // Event Listeners
-    sidebarToggle.addEventListener('click', () => sidebar.classList.add('open'));
-    closeSidebar.addEventListener('click', () => sidebar.classList.remove('open'));
-    logoutButton.addEventListener('click', () => {
-        firebase.auth().signOut();
-        landingDiv.classList.remove('hidden');
-        dashboardDiv.classList.add('hidden');
-    });
-    loginButton.addEventListener('click', () => {
+// Observe all fade-in elements
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Firebase Auth
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        userEmailSpan.textContent = user.email;
+        accountEmailSpan.textContent = user.email;
+        loginButton.classList.add('hidden');
+        logoutButton.classList.remove('hidden');
+        loadProducts();
+        loadOfferCards();
+        loadRewards();
+        loadUserProfile();
+    } else {
+        userEmailSpan.textContent = '';
+        accountEmailSpan.textContent = '';
+        loginButton.classList.remove('hidden');
+        logoutButton.classList.add('hidden');
+    }
+});
+
+// Event Listeners
+sidebarToggle.addEventListener('click', () => sidebar.classList.add('open'));
+closeSidebar.addEventListener('click', () => sidebar.classList.remove('open'));
+logoutButton.addEventListener('click', () => {
+    firebase.auth().signOut();
+    landingDiv.classList.remove('hidden');
+    dashboardDiv.classList.add('hidden');
+});
+loginButton.addEventListener('click', () => {
+    landingDiv.classList.add('hidden');
+    loginSignupDiv.classList.remove('hidden');
+    signupFormDiv.classList.add('hidden');
+    dashboardDiv.classList.add('hidden');
+    sidebar.classList.remove('open');
+});
+showSignupLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    loginSignupDiv.classList.add('hidden');
+    signupFormDiv.classList.remove('hidden');
+});
+showLoginLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    loginSignupDiv.classList.remove('hidden');
+    signupFormDiv.classList.add('hidden');
+});
+getStartedButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    landingDiv.classList.add('hidden');
+    dashboardDiv.classList.remove('hidden');
+    document.getElementById('explore').classList.remove('hidden');
+    loadProducts();
+});
+logo.addEventListener('click', () => {
+    views.forEach(view => document.getElementById(view).classList.add('hidden'));
+    dashboardDiv.classList.add('hidden');
+    landingDiv.classList.remove('hidden');
+});
+
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => {
+            loginSignupDiv.classList.add('hidden');
+            document.getElementById('explore').classList.remove('hidden');
+            dashboardDiv.classList.remove('hidden');
+        })
+        .catch((error) => alert('Login Error: ' + error.message));
+});
+
+signupForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('signup-name').value;
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            return firebase.database().ref('users/' + userCredential.user.uid).set({
+                name: name,
+                email: email
+            });
+        })
+        .then(() => {
+            signupFormDiv.classList.add('hidden');
+            document.getElementById('explore').classList.remove('hidden');
+            dashboardDiv.classList.remove('hidden');
+        })
+        .catch((error) => alert('Signup Error: ' + error.message));
+});
+
+uploadProductForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('product-name').value;
+    const description = document.getElementById('product-description').value;
+    const video = document.getElementById('product-video').files[0];
+    const link = document.getElementById('product-link').value;
+    
+    const user = firebase.auth().currentUser;
+    if (user) {
+        const fileName = `${name}_${Date.now()}.mp4`;
+        const storageRef = firebase.storage().ref('productVideos/' + fileName);
+        
+        storageRef.put(video).then(() => {
+            return storageRef.getDownloadURL();
+        }).then((videoUrl) => {
+            return firebase.database().ref('Products').push({
+                name: name,
+                description: description,
+                videoUrl: videoUrl,
+                link: link,
+                userId: user.uid
+            });
+        }).then(() => {
+            alert('Product uploaded successfully!');
+            uploadProductForm.reset();
+            loadProducts();
+        }).catch((error) => {
+            console.error('Error uploading product:', error);
+            alert('Failed to upload product. Please try again.');
+        });
+    } else {
+        alert('Please log in to upload a product.');
+    }
+});
+
+uploadOfferForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('offer-name').value;
+    const description = document.getElementById('offer-description').value;
+    const discount = document.getElementById('offer-discount').value;
+    const expiry = document.getElementById('offer-expiry').value;
+    const image = document.getElementById('offer-image').files[0];
+    
+    const user = firebase.auth().currentUser;
+    if (user) {
+        const fileName = `${name}_${Date.now()}.jpg`;
+        const storageRef = firebase.storage().ref('offerImages/' + fileName);
+        
+        storageRef.put(image).then(() => {
+            return storageRef.getDownloadURL();
+        }).then((imageUrl) => {
+            return firebase.database().ref('OfferCards').push({
+                name: name,
+                description: description,
+                discount: discount,
+                expiry: expiry,
+                imageUrl: imageUrl,
+            });
+        }).then(() => {
+            alert('Offer uploaded successfully!');
+            uploadOfferForm.reset();
+            loadOfferCards();
+        }).catch((error) => {
+            console.error('Error uploading offer:', error);
+            alert('Failed to upload offer. Please try again.');
+        });
+    } else {
+        alert('Please log in to upload an offer.');
+    }
+});
+
+viewButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const view = button.getAttribute('data-view');
+        views.forEach(v => {
+            document.getElementById(v).classList.add('hidden');
+        });
+        document.getElementById(view).classList.remove('hidden');
+        dashboardDiv.classList.remove('hidden');
         landingDiv.classList.add('hidden');
-        loginSignupDiv.classList.remove('hidden');
-        signupFormDiv.classList.add('hidden');
-        dashboardDiv.classList.add('hidden');
         sidebar.classList.remove('open');
     });
-    showSignupLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        loginSignupDiv.classList.add('hidden');
-        signupFormDiv.classList.remove('hidden');
-    });
-    showLoginLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        loginSignupDiv.classList.remove('hidden');
-        signupFormDiv.classList.add('hidden');
-    });
-    getStartedButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        landingDiv.classList.add('hidden');
-        dashboardDiv.classList.remove('hidden');
-        document.getElementById('explore').classList.remove('hidden');
-        loadProducts();
-    });
-    logo.addEventListener('click', () => {
-        views.forEach(view => document.getElementById(view).classList.add('hidden'));
-        dashboardDiv.classList.add('hidden');
-        landingDiv.classList.remove('hidden');
-    });
+});
 
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => {
-                loginSignupDiv.classList.add('hidden');
-                document.getElementById('explore').classList.remove('hidden');
-                dashboardDiv.classList.remove('hidden');
-            })
-            .catch((error) => alert('Login Error: ' + error.message));
-    });
+editProfileButton.addEventListener('click', () => {
+    profileInfo.classList.toggle('hidden');
+    profileEdit.classList.toggle('hidden');
+});
 
-    signupForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('signup-name').value;
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                return firebase.database().ref('users/' + userCredential.user.uid).set({
-                    name: name,
-                    email: email
-                });
-            })
-            .then(() => {
-                signupFormDiv.classList.add('hidden');
-                document.getElementById('explore').classList.remove('hidden');
-                dashboardDiv.classList.remove('hidden');
-            })
-            .catch((error) => alert('Signup Error: ' + error.message));
-    });
+profileTypeSelect.addEventListener('change', () => {
+    if (profileTypeSelect.value === 'buyer') {
+        buyerForm.classList.remove('hidden');
+        sellerForm.classList.add('hidden');
+    } else {
+        buyerForm.classList.add('hidden');
+        sellerForm.classList.remove('hidden');
+    }
+});
 
-    uploadProductForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('product-name').value;
-        const description = document.getElementById('product-description').value;
-        const video = document.getElementById('product-video').files[0];
-        const link = document.getElementById('product-link').value;
-        
-        const user = firebase.auth().currentUser;
-        if (user) {
-            const fileName = `${name}_${Date.now()}.mp4`;
-            const storageRef = firebase.storage().ref('productVideos/' + fileName);
-            
-            storageRef.put(video).then(() => {
-                return storageRef.getDownloadURL();
-            }).then((videoUrl) => {
-                return firebase.database().ref('Products').push({
-                    name: name,
-                    description: description,
-                    videoUrl: videoUrl,
-                    link: link,
-                });
-            }).then(() => {
-                alert('Product uploaded successfully!');
-                uploadProductForm.reset();
-                loadProducts();
-            }).catch((error) => {
-                console.error('Error uploading product:', error);
-                alert('Failed to upload product. Please try again.');
-            });
-        } else {
-            alert('Please log in to upload a product.');
-        }
-    });
-
-    uploadOfferForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('offer-name').value;
-        const description = document.getElementById('offer-description').value;
-        const discount = document.getElementById('offer-discount').value;
-        const expiry = document.getElementById('offer-expiry').value;
-        const image = document.getElementById('offer-image').files[0];
-        
-        const user = firebase.auth().currentUser;
-        if (user) {
-            const fileName = `${name}_${Date.now()}.jpg`;
-            const storageRef = firebase.storage().ref('offerImages/' + fileName);
-            
-            storageRef.put(image).then(() => {
-                return storageRef.getDownloadURL();
-            }).then((imageUrl) => {
-                return firebase.database().ref('OfferCards').push({
-                    name: name,
-                    description: description,
-                    discount: discount,
-                    expiry: expiry,
-                    imageUrl: imageUrl,
-                });
-            }).then(() => {
-                alert('Offer uploaded successfully!');
-                uploadOfferForm.reset();
-                loadOfferCards();
-            }).catch((error) => {
-                console.error('Error uploading offer:', error);
-                alert('Failed to upload offer. Please try again.');
-            });
-        } else {
-            alert('Please log in to upload an offer.');
-        }
-    });
-
-    viewButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const view = button.getAttribute('data-view');
-            views.forEach(v => {
-                document.getElementById(v).classList.add('hidden');
-            });
-            document.getElementById(view).classList.remove('hidden');
-            dashboardDiv.classList.remove('hidden');
-            landingDiv.classList.add('hidden');
-            sidebar.classList.remove('open');
+buyerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const user = firebase.auth().currentUser;
+    if (user) {
+        firebase.database().ref('users/' + user.uid).update({
+            profileType: 'buyer',
+            name: document.getElementById('buyer-name').value,
+            phone: document.getElementById('buyer-phone').value,
+            address: document.getElementById('buyer-address').value
+        }).then(() => {
+            alert('Buyer profile updated successfully!');
+            loadUserProfile();
+            profileInfo.classList.remove('hidden');
+            profileEdit.classList.add('hidden');
+        }).catch((error) => {
+            console.error('Error updating profile:', error);
+            alert('Failed to update profile. Please try again.');
         });
-    });
+    }
+});
 
-    editProfileButton.addEventListener('click', () => {
-        profileInfo.classList.toggle('hidden');
-        profileEdit.classList.toggle('hidden');
-    });
+sellerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const user = firebase.auth().currentUser;
+    if (user) {
+        firebase.database().ref('users/' + user.uid).update({
+            profileType: 'seller',
+            businessName: document.getElementById('seller-name').value,
+            businessPhone: document.getElementById('seller-phone').value,
+            businessAddress: document.getElementById('seller-address').value,
+            taxId: document.getElementById('seller-tax-id').value,
+            businessDescription: document.getElementById('seller-description').value
+        }).then(() => {
+            alert('Seller profile updated successfully!');
+            loadUserProfile();
+            profileInfo.classList.remove('hidden');
+            profileEdit.classList.add('hidden');
+        }).catch((error) => {
+            console.error('Error updating profile:', error);
+            alert('Failed to update profile. Please try again.');
+        });
+    }
+});
 
-    profileTypeSelect.addEventListener('change', () => {
-        if (profileTypeSelect.value === 'buyer') {
-            buyerForm.classList.remove('hidden');
-            sellerForm.classList.add('hidden');
-        } else {
-            buyerForm.classList.add('hidden');
-            sellerForm.classList.remove('hidden');
-        }
-    });
+// Reels functionality
+openReelsButton.addEventListener('click', () => {
+    reelsContainer.classList.remove('hidden');
+    loadReels();
+});
 
-    buyerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const user = firebase.auth().currentUser;
-        if (user) {
-            firebase.database().ref('users/' + user.uid).update({
-                profileType: 'buyer',
-                name: document.getElementById('buyer-name').value,
-                phone: document.getElementById('buyer-phone').value,
-                address: document.getElementById('buyer-address').value
-            }).then(() => {
-                alert('Buyer profile updated successfully!');
-                loadUserProfile();
-                profileInfo.classList.remove('hidden');
-                profileEdit.classList.add('hidden');
-            }).catch((error) => {
-                console.error('Error updating profile:', error);
-                alert('Failed to update profile. Please try again.');
-            });
-        }
-    });
+closeReelsButton.addEventListener('click', () => {
+    reelsContainer.classList.add('hidden');
+});
 
-    sellerForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const user = firebase.auth().currentUser;
-        if (user) {
-            firebase.database().ref('users/' + user.uid).update({
-                profileType: 'seller',
-                businessName: document.getElementById('seller-name').value,
-                businessPhone: document.getElementById('seller-phone').value,
-                businessAddress: document.getElementById('seller-address').value,
-                taxId: document.getElementById('seller-tax-id').value,
-                businessDescription: document.getElementById('seller-description').value
-            }).then(() => {
-                alert('Seller profile updated successfully!');
-                loadUserProfile();
-                profileInfo.classList.remove('hidden');
-                profileEdit.classList.add('hidden');
-            }).catch((error) => {
-                console.error('Error updating profile:', error);
-                alert('Failed to update profile. Please try again.');
-            });
-        }
-    });
-
-    function loadProducts() {
-        const productsGrid = document.getElementById('products-grid');
-        productsGrid.innerHTML = '';
-        firebase.database().ref('Products').once('value').then((snapshot) => {
-            snapshot.forEach((childSnapshot) => {
-                const product = childSnapshot.val();
-                const productCard = document.createElement('div');
-                productCard.className = 'card fade-in';
-                productCard.innerHTML = `
-                    <video src="${product.videoUrl}" controls class="card-image"></video>
-                    <div class="card-content">
+function loadReels() {
+    reelsContainer.innerHTML = '';
+    firebase.database().ref('Products').once('value').then((snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+            const product = childSnapshot.val();
+            const reelItem = document.createElement('div');
+            reelItem.className = 'reel-item';
+            reelItem.innerHTML = `
+                <div class="reel-video-container">
+                    <video class="reel-video" src="${product.videoUrl}" loop></video>
+                    <div class="reel-content">
                         <h3>${product.name}</h3>
                         <p>${product.description}</p>
-                        <a href="${product.link}" target="_blank" class="button"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+                        <a href="${product.link}" target="_blank" class="button">Buy Now</a>
                     </div>
-                `;
-                productsGrid.appendChild(productCard);
-                observer.observe(productCard);
-            });
-        });
-    }
-
-    function loadOfferCards() {
-        const offerCardsGrid = document.getElementById('offer-cards-grid');
-        offerCardsGrid.innerHTML = '';
-        firebase.database().ref('OfferCards').once('value').then((snapshot) => {
-            snapshot.forEach((childSnapshot) => {
-                const offerCard = childSnapshot.val();
-                const card = document.createElement('div');
-                card.className = 'card fade-in';
-                card.innerHTML = `
-                    <img src="${offerCard.imageUrl}" alt="${offerCard.name}" class="card-image">
-                    <div class="card-content">
-                        <h3>${offerCard.name}</h3>
-                        <p>${offerCard.description}</p>
-                        <p>${offerCard.discount}% OFF</p>
-                        <p>Expires: ${offerCard.expiry}</p>
-                        <button class="button"><i class="fas fa-tag"></i> Claim Offer</button>
+                    <div class="reel-actions">
+                        <button class="reel-action-button like-button" data-product-id="${childSnapshot.key}"><i class="fas fa-heart"></i></button>
+                        <button class="reel-action-button comment-button" data-product-id="${childSnapshot.key}"><i class="fas fa-comment"></i></button>
+                        <button class="reel-action-button share-button" data-product-id="${childSnapshot.key}"><i class="fas fa-share"></i></button>
                     </div>
-                `;
-                offerCardsGrid.appendChild(card);
-                observer.observe(card);
-            });
-        });
-    }
-
-    function loadRewards() {
-        const rewardsGrid = document.getElementById('rewards-grid');
-        rewardsGrid.innerHTML = '';
-        const rewards = [
-            { name: "Daily Bonus", description: "Claim your daily reward", icon: "fa-calendar-check" },
-            { name: "Achievement Badge", description: "For completing 10 tasks", icon: "fa-medal" },
-            { name: "Level Up Reward", description: "Reached level 5!", icon: "fa-level-up-alt" },
-            { name: "Special Event Prize", description: "Winner of the weekly challenge", icon: "fa-award" },
-            { name: "Loyalty Points", description: "Accumulated 1000 points", icon: "fa-star" },
-            { name: "Mystery Box", description: "Random reward for active users", icon: "fa-box-open" },
-        ];
-        rewards.forEach(reward => {
-            const card = document.createElement('div');
-            card.className = 'card fade-in';
-            card.innerHTML = `
-                <div class="card-content">
-                    <i class="fas ${reward.icon} fa-3x" style="color: var(--primary-color);"></i>
-                    <h3>${reward.name}</h3>
-                    <p>${reward.description}</p>
-                    <button class="button"><i class="fas fa-gift"></i> Claim Reward</button>
+                    <div class="reel-comments">
+                        <div class="comments-list"></div>
+                        <form class="comment-form">
+                            <input type="text" class="comment-input" placeholder="Add a comment...">
+                            <button type="submit" class="comment-submit">Post</button>
+                        </form>
+                    </div>
                 </div>
             `;
-            rewardsGrid.appendChild(card);
-            observer.observe(card);
-        });
-    }
+            reelsContainer.appendChild(reelItem);
 
-    function loadUserProfile() {
-        const user = firebase.auth().currentUser;
-        if (user) {
-            firebase.database().ref('users/' + user.uid).once('value').then((snapshot) => {
-                const userData = snapshot.val();
-                if (userData) {
-                    document.getElementById('profile-type').textContent = userData.profileType || 'Not Set';
-                    if (userData.profileType === 'buyer') {
-                        document.getElementById('buyer-name').value = userData.name || '';
-                        document.getElementById('buyer-phone').value = userData.phone || '';
-                        document.getElementById('buyer-address').value = userData.address || '';
-                    } else if (userData.profileType === 'seller') {
-                        document.getElementById('seller-name').value = userData.businessName || '';
-                        document.getElementById('seller-phone').value = userData.businessPhone || '';
-                        document.getElementById('seller-address').value = userData.businessAddress || '';
-                        document.getElementById('seller-tax-id').value = userData.taxId || '';
-                        document.getElementById('seller-description').value = userData.businessDescription || '';
-                    }
+            const video = reelItem.querySelector('.reel-video');
+            const commentButton = reelItem.querySelector('.comment-button');
+            const commentsSection = reelItem.querySelector('.reel-comments');
+            const likeButton = reelItem.querySelector('.like-button');
+            const shareButton = reelItem.querySelector('.share-button');
+            const commentForm = reelItem.querySelector('.comment-form');
+
+            video.addEventListener('click', () => {
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
                 }
             });
+
+            commentButton.addEventListener('click', () => {
+                commentsSection.classList.toggle('show');
+            });
+
+            likeButton.addEventListener('click', () => {
+                const productId = likeButton.getAttribute('data-product-id');
+                toggleLike(productId, likeButton);
+            });
+
+            shareButton.addEventListener('click', () => {
+                const productId = shareButton.getAttribute('data-product-id');
+                shareProduct(productId);
+            });
+
+            commentForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const productId = commentButton.getAttribute('data-product-id');
+                const commentInput = commentForm.querySelector('.comment-input');
+                addComment(productId, commentInput.value);
+                commentInput.value = '';
+            });
+
+            loadComments(childSnapshot.key, reelItem.querySelector('.comments-list'));
+        });
+
+        // Start playing the first video
+        const firstVideo = reelsContainer.querySelector('.reel-video');
+        if (firstVideo) {
+            firstVideo.play();
+        }
+    });
+}
+
+function toggleLike(productId, likeButton) {
+    const user = firebase.auth().currentUser;
+    if (user) {
+        const likeRef = firebase.database().ref(`likes/${productId}/${user.uid}`);
+        likeRef.once('value').then((snapshot) => {
+            if (snapshot.exists()) {
+                // User has already liked, so unlike
+                likeRef.remove();
+                likeButton.classList.remove('active');
+            } else {
+                // User hasn't liked, so add like
+                likeRef.set(true);
+                likeButton.classList.add('active');
+            }
+        });
+    } else {
+        alert('Please log in to like products.');
+    }
+}
+
+function shareProduct(productId) {
+    // For this example, we'll just copy the product link to clipboard
+    const productLink = `https://yourdomain.com/product/${productId}`;
+    navigator.clipboard.writeText(productLink).then(() => {
+        alert('Product link copied to clipboard!');
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
+}
+
+function addComment(productId, comment) {
+    const user = firebase.auth().currentUser;
+    if (user) {
+        firebase.database().ref(`comments/${productId}`).push({
+            userId: user.uid,
+            userName: user.displayName || user.email,
+            comment: comment,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+    } else {
+        alert('Please log in to add comments.');
+    }
+}
+
+function loadComments(productId, commentsListElement) {
+    firebase.database().ref(`comments/${productId}`).on('child_added', (snapshot) => {
+        const comment = snapshot.val();
+        const commentElement = document.createElement('div');
+        commentElement.className = 'comment';
+        commentElement.innerHTML = `
+            <strong>${comment.userName}</strong>: ${comment.comment}
+        `;
+        commentsListElement.appendChild(commentElement);
+    });
+}
+
+// Intersection Observer for video autoplay
+const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.play();
+        } else {
+            entry.target.pause();
+        }
+    });
+}, { threshold: 0.5 });
+
+// Observe all videos in the reels container
+reelsContainer.addEventListener('DOMNodeInserted', (event) => {
+    if (event.target.classList && event.target.classList.contains('reel-item')) {
+        const video = event.target.querySelector('.reel-video');
+        if (video) {
+            videoObserver.observe(video);
         }
     }
+});
 
-    // Initial load
-    loadProducts();
-    loadOfferCards();
-    loadRewards();
+// Search functionality
+searchInput.addEventListener('input', debounce(() => {
+    const searchTerm = searchInput.value.toLowerCase();
+    searchProducts(searchTerm);
+}, 300));
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function searchProducts(searchTerm) {
+    const productsGrid = document.getElementById('products-grid');
+    productsGrid.innerHTML = '';
+    firebase.database().ref('Products').once('value').then((snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+            const product = childSnapshot.val();
+            if (product.name.toLowerCase().includes(searchTerm) || product.description.toLowerCase().includes(searchTerm)) {
+                const productCard = createProductCard(product);
+                productsGrid.appendChild(productCard);
+                observer.observe(productCard);
+            }
+        });
+    });
+}
+
+function createProductCard(product) {
+    const productCard = document.createElement('div');
+    productCard.className = 'card fade-in';
+    productCard.innerHTML = `
+        <video src="${product.videoUrl}" controls class="card-image"></video>
+        <div class="card-content">
+            <h3>${product.name}</h3>
+            <p>${product.description}</p>
+            <a href="${product.link}" target="_blank" class="button"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+        </div>
+    `;
+    return productCard;
+}
+
+function loadProducts() {
+    const productsGrid = document.getElementById('products-grid');
+    productsGrid.innerHTML = '';
+    firebase.database().ref('Products').once('value').then((snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+            const product = childSnapshot.val();
+            const productCard = createProductCard(product);
+            productsGrid.appendChild(productCard);
+            observer.observe(productCard);
+        });
+    });
+}
+
+function loadOfferCards() {
+    const offerCardsGrid = document.getElementById('offer-cards-grid');
+    offerCardsGrid.innerHTML = '';
+    firebase.database().ref('OfferCards').once('value').then((snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+            const offerCard = childSnapshot.val();
+            const card =document.createElement('div');
+            card.className = 'card fade-in';
+            card.innerHTML = `
+                <img src="${offerCard.imageUrl}" alt="${offerCard.name}" class="card-image">
+                <div class="card-content">
+                    <h3>${offerCard.name}</h3>
+                    <p>${offerCard.description}</p>
+                    <p>${offerCard.discount}% OFF</p>
+                    <p>Expires: ${offerCard.expiry}</p>
+                    <button class="button"><i class="fas fa-tag"></i> Claim Offer</button>
+                </div>
+            `;
+            offerCardsGrid.appendChild(card);
+            observer.observe(card);
+        });
+    });
+}
+
+function loadRewards() {
+    const rewardsGrid = document.getElementById('rewards-grid');
+    rewardsGrid.innerHTML = '';
+    const rewards = [
+        { name: "Daily Bonus", description: "Claim your daily reward", icon: "fa-calendar-check" },
+        { name: "Achievement Badge", description: "For completing 10 tasks", icon: "fa-medal" },
+        { name: "Level Up Reward", description: "Reached level 5!", icon: "fa-level-up-alt" },
+        { name: "Special Event Prize", description: "Winner of the weekly challenge", icon: "fa-award" },
+        { name: "Loyalty Points", description: "Accumulated 1000 points", icon: "fa-star" },
+        { name: "Mystery Box", description: "Random reward for active users", icon: "fa-box-open" },
+    ];
+    rewards.forEach(reward => {
+        const card = document.createElement('div');
+        card.className = 'card fade-in';
+        card.innerHTML = `
+            <div class="card-content">
+                <i class="fas ${reward.icon} fa-3x" style="color: var(--primary-color);"></i>
+                <h3>${reward.name}</h3>
+                <p>${reward.description}</p>
+                <button class="button"><i class="fas fa-gift"></i> Claim Reward</button>
+            </div>
+        `;
+        rewardsGrid.appendChild(card);
+        observer.observe(card);
+    });
+}
+
+function loadUserProfile() {
+    const user = firebase.auth().currentUser;
+    if (user) {
+        firebase.database().ref('users/' + user.uid).once('value').then((snapshot) => {
+            const userData = snapshot.val();
+            if (userData) {
+                document.getElementById('profile-type').textContent = userData.profileType || 'Not Set';
+                if (userData.profileType === 'buyer') {
+                    document.getElementById('buyer-name').value = userData.name || '';
+                    document.getElementById('buyer-phone').value = userData.phone || '';
+                    document.getElementById('buyer-address').value = userData.address || '';
+                } else if (userData.profileType === 'seller') {
+                    document.getElementById('seller-name').value = userData.businessName || '';
+                    document.getElementById('seller-phone').value = userData.businessPhone || '';
+                    document.getElementById('seller-address').value = userData.businessAddress || '';
+                    document.getElementById('seller-tax-id').value = userData.taxId || '';
+                    document.getElementById('seller-description').value = userData.businessDescription || '';
+                }
+            }
+        });
+    }
+}
+
+// Initial load
+loadProducts();
+loadOfferCards();
+loadRewards();
 </script>
 </body>
 </html>
