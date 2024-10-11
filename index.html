@@ -419,7 +419,6 @@
             background-color: rgba(255, 255, 255, 0.1);
             color: var(--text-color);
         }
-        
         .comment-submit {
             background-color: var(--primary-color);
             color: var(--secondary-color);
@@ -496,6 +495,56 @@
             transform: rotate(-45deg);
             font-size: 12px;
             font-weight: bold;
+        }
+        .ondc-badge {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .filter-button {
+            background-color: var(--card-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .filter-button:hover, .filter-button.active {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+        }
+        .ondc-features {
+            background-color: var(--card-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .ondc-features h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        .ondc-features ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .ondc-features li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .ondc-features li i {
+            color: var(--primary-color);
+            margin-right: 10px;
         }
         @media (max-width: 768px) {
             .container {
@@ -722,13 +771,27 @@
                         <input type="text" id="seller-tax-id" placeholder="Tax ID" required>
                         <textarea id="seller-description" placeholder="Business Description" required></textarea>
                         <button type="submit" class="button">Save Seller Profile</button>
-                    </form>
-                </div>
+                    </form></div>
             </div>
 
             <div id="marketplace" class="main-content hidden fade-in">
                 <h2><i class="fas fa-shopping-basket"></i> ONDC Marketplace</h2>
+                <div class="filter-container">
+                    <button class="filter-button active" data-category="all">All</button>
+                    <button class="filter-button" data-category="local">Local Artisans</button>
+                    <button class="filter-button" data-category="organic">Organic Products</button>
+                    <button class="filter-button" data-category="eco">Eco-friendly</button>
+                </div>
                 <div id="marketplace-grid" class="grid"></div>
+                <div class="ondc-features">
+                    <h3>ONDC Benefits</h3>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Direct connection with local sellers</li>
+                        <li><i class="fas fa-check-circle"></i> Transparent pricing and policies</li>
+                        <li><i class="fas fa-check-circle"></i> Support for small businesses</li>
+                        <li><i class="fas fa-check-circle"></i> Wider product variety</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -789,6 +852,7 @@
         const reelsContainer = document.getElementById('reels-container');
         const closeReelsButton = document.getElementById('close-reels');
         const searchInput = document.getElementById('search-input');
+        const filterButtons = document.querySelectorAll('.filter-button');
 
         // Event Listeners and Functions
 
@@ -958,6 +1022,9 @@
                 });
                 document.getElementById(view).classList.remove('hidden');
                 sidebar.classList.remove('open');
+                if (view === 'marketplace') {
+                    loadMarketplace();
+                }
             });
         });
 
@@ -1338,28 +1405,25 @@
             }
         }
 
-        // ONDC additional features
-        function initONDC() {
-            console.log("Initializing ONDC features");
-            loadMarketplace();
-        }
-
+        // ONDC Marketplace functionality
         function loadMarketplace() {
             const marketplaceGrid = document.getElementById('marketplace-grid');
             marketplaceGrid.innerHTML = '';
             // Simulated ONDC marketplace data
             const marketplaceItems = [
-                { name: "Local Artisan Crafts", description: "Handmade products from local artisans", price: 50 },
-                { name: "Fresh Farm Produce", description: "Organic vegetables and fruits", price: 30 },
-                { name: "Eco-friendly Home Goods", description: "Sustainable household items", price: 40 },
-                { name: "Regional Specialties", description: "Unique food items from different regions", price: 25 },
+                { name: "Handcrafted Pottery", description: "Unique ceramic pieces by local artisans", price: 50, category: "local" },
+                { name: "Organic Vegetables Box", description: "Fresh, locally sourced organic produce", price: 30, category: "organic" },
+                { name: "Bamboo Cutlery Set", description: "Eco-friendly alternative to plastic utensils", price: 25, category: "eco" },
+                { name: "Handwoven Textiles", description: "Traditional textiles made by local weavers", price: 40, category: "local" },
+                { name: "Organic Honey", description: "Pure, unprocessed honey from local beekeepers", price: 15, category: "organic" },
+                { name: "Recycled Paper Notebooks", description: "Environmentally friendly stationery", price: 10, category: "eco" },
             ];
             marketplaceItems.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'card fade-in';
+                card.className = `card fade-in ${item.category}`;
                 card.innerHTML = `
                     <div class="card-content">
-                        <h3>${item.name}</h3>
+                        <h3>${item.name} <span class="ondc-badge">ONDC</span></h3>
                         <p>${item.description}</p>
                         <p>Price: $${item.price}</p>
                         <button class="button">Add to Cart</button>
@@ -1367,6 +1431,27 @@
                 `;
                 marketplaceGrid.appendChild(card);
                 observer.observe(card);
+            });
+        }
+
+        // Filter functionality for ONDC Marketplace
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.getAttribute('data-category');
+                filterMarketplace(category);
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        function filterMarketplace(category) {
+            const items = document.querySelectorAll('#marketplace-grid .card');
+            items.forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
             });
         }
 
@@ -1400,13 +1485,11 @@
             }
         }
 
-        // Call ONDC initialization
-        initONDC();
-
         // Initial load
         loadProducts();
         loadOfferCards();
         loadRewards();
+        loadMarketplace();
     </script>
 </body>
 </html>
