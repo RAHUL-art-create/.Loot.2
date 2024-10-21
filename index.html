@@ -333,7 +333,7 @@
         .reels-container {
             position: relative;
             width: 100%;
-            height: calc(100vh - 160px);
+            height: calc(100vh - 80px);
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
         }
@@ -345,12 +345,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-bottom: 20px;
         }
         .reel-video-container {
             position: relative;
             width: 100%;
-            max-width: 315px;
-            height: 560px;
+            max-width: 400px;
+            height: 70vh;
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(223, 189, 187, 0.2);
@@ -449,7 +450,7 @@
         }
         .reward-card {
             background-color: var(--card-color);
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 4px 6px rgba(223, 189, 187, 0.1);
             padding: 20px;
             text-align: center;
@@ -510,6 +511,17 @@
             transform: rotate(-45deg);
             font-size: 12px;
             font-weight: bold;
+        }
+        .reward-card .rarity-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 10px;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
         }
         .chat-container {
             display: none;
@@ -960,8 +972,16 @@
                     <span>Language <i class="fas fa-info-circle" title="Choose your preferred language"></i></span>
                     <select id="language-select">
                         <option value="en">English</option>
-                        <option value="es">Español</option>
-                        <option value="fr">Français</option>
+                        <option value="hi">हिन्दी (Hindi)</option>
+                        <option value="bn">বাংলা (Bengali)</option>
+                        <option value="te">తెలుగు (Telugu)</option>
+                        <option value="mr">मराठी (Marathi)</option>
+                        <option value="ta">தமிழ் (Tamil)</option>
+                        <option value="ur">اردو (Urdu)</option>
+                        <option value="gu">ગુજરાતી (Gujarati)</option>
+                        <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                        <option value="ml">മലയാളം (Malayalam)</option>
+                        <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
                     </select>
                 </div>
                 <h3>Loot Settings</h3>
@@ -1058,7 +1078,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
     <script>
-        // Initialize Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyClf6W3B2nesvjfZtRSMcjbt6NRp6uy-Po",
             authDomain: "lootbase-4d01f.firebaseapp.com",
@@ -1071,7 +1090,6 @@
         };
         firebase.initializeApp(firebaseConfig);
 
-        // DOM Elements
         const loginSignupDiv = document.getElementById('login-signup');
         const signupFormDiv = document.getElementById('signup-form');
         const userEmailSpan = document.getElementById('user-email');
@@ -1112,12 +1130,11 @@
         const editUsernameButton = document.getElementById('edit-username');
         const cartIcon = document.querySelector('.cart-icon');
         const cartCount = document.querySelector('.cart-count');
-        
+
         let cartItems = [];
 
         const views = ['landing', 'explore', 'loot', 'shop', 'rewards', 'account', 'marketplace', 'login-signup', 'signup-form'];
 
-        // Marketplace items
         const marketplaceItems = [
             { name: "Local Artisan Crafts", description: "Handmade products from local artisans", price: 50, seller: "Craft Co-op", category: "local" },
             { name: "Fresh Farm Produce", description: "Organic vegetables and fruits", price: 30, seller: "Green Farms", category: "organic" },
@@ -1131,35 +1148,107 @@
             { name: "Herbal Tea Blends", description: "Organic herbal tea assortments", price: 18, seller: "Tea Haven", category: "organic" },
         ];
 
-        // Event Listeners and Functions
+        function showView(view) {
+            views.forEach(v => {
+                const element = document.getElementById(v);
+                if (element) {
+                    element.classList.add('hidden');
+                }
+            });
+            
+            const viewElement = document.getElementById(view);
+            if (viewElement) {
+                viewElement.classList.remove('hidden');
+            } else {
+                console.warn(`View "${view}" not found`);
+            }
+            
+            if (view === 'explore') {
+                loadReels();
+            } else if (view === 'loot') {
+                loadOfferCards();
+            } else if (view === 'rewards') {
+                loadRewards();
+            } else if (view === 'marketplace') {
+                loadMarketplace();
+            } else if (view === 'account') {
+                loadUserProfile();
+            }
+            
+            sidebar.classList.remove('open');
+            document.querySelector('.container').style.paddingLeft = '20px';
+        }
 
-        // Firebase Auth
-        firebase.auth().onAuthStateChanged((user) => {
+        viewButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const view = button.getAttribute('data-view');
+                showView(view);
+            });
+        });
+
+        function loadUserProfile() {
+            const user = firebase.auth().currentUser;
             if (user) {
                 userEmailSpan.textContent = user.email;
                 accountEmailSpan.textContent = user.email;
                 accountUsernameSpan.textContent = user.displayName || 'Not set';
-                loginButton.classList.add('hidden');
-                logoutButton.classList.remove('hidden');
-                loadUserProfile();
-            } else {
-                userEmailSpan.textContent = '';
-                accountEmailSpan.textContent = '';
-                accountUsernameSpan.textContent = '';
-                loginButton.classList.remove('hidden');
-                logoutButton.classList.add('hidden');
             }
-        });
-
-        // Add this function to the existing JavaScript code
-        function openChat(seller) {
-            chatContainer.style.display = 'flex';
-            document.getElementById('chat-title').textContent = `Chat with ${seller}`;
-            chatMessages.innerHTML = ''; // Clear previous messages
-            chatInput.value = ''; // Clear input field
         }
 
-        // Event Listeners
+        const exploreSection = document.getElementById('explore');
+        if (!exploreSection) {
+            const newExploreDiv = document.createElement('div');
+            newExploreDiv.id = 'explore';
+            newExploreDiv.className = 'main-content hidden';
+            newExploreDiv.innerHTML = `<!-- Explore content -->`;
+            document.querySelector('.container').appendChild(newExploreDiv);
+        }
+
+        const lootSection = document.getElementById('loot');
+        if (!lootSection) {
+            const newLootDiv = document.createElement('div');
+            newLootDiv.id = 'loot';
+            newLootDiv.className = 'main-content hidden';
+            newLootDiv.innerHTML = `<!-- Loot content -->`;
+            document.querySelector('.container').appendChild(newLootDiv);
+        }
+
+        const shopSection = document.getElementById('shop');
+        if (!shopSection) {
+            const newShopDiv = document.createElement('div');
+            newShopDiv.id = 'shop';
+            newShopDiv.className = 'main-content hidden';
+            newShopDiv.innerHTML = `<!-- Shop content -->`;
+            document.querySelector('.container').appendChild(newShopDiv);
+        }
+
+        const rewardsSection = document.getElementById('rewards');
+        if (!rewardsSection) {
+            const newRewardsDiv = document.createElement('div');
+            newRewardsDiv.id = 'rewards';
+            newRewardsDiv.className = 'main-content hidden';
+            newRewardsDiv.innerHTML = `<!-- Rewards content -->`;
+            document.querySelector('.container').appendChild(newRewardsDiv);
+        }
+
+        const accountSection = document.getElementById('account');
+        if (!accountSection) {
+            const newAccountDiv = document.createElement('div');
+            newAccountDiv.id = 'account';
+            newAccountDiv.className = 'main-content hidden';
+            newAccountDiv.innerHTML = `<!-- Account content -->`;
+            document.querySelector('.container').appendChild(newAccountDiv);
+        }
+
+        const marketplaceSection = document.getElementById('marketplace');
+        if (!marketplaceSection) {
+            const newMarketplaceDiv = document.createElement('div');
+            newMarketplaceDiv.id = 'marketplace';
+            newMarketplaceDiv.className = 'main-content hidden';
+            newMarketplaceDiv.innerHTML = `<!-- Marketplace content -->`;
+            document.querySelector('.container').appendChild(newMarketplaceDiv);
+        }
+
         sidebarToggle.addEventListener('click', () => {
             toggleSidebar();
         });
@@ -1313,74 +1402,6 @@
             });
         }
 
-        viewButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const view = button.getAttribute('data-view');
-                showView(view);
-                sidebar.classList.remove('open');
-            });
-        });
-
-        editProfileButton.addEventListener('click', () => {
-            profileInfo.classList.toggle('hidden');
-            profileEdit.classList.toggle('hidden');
-        });
-
-        profileTypeSelect.addEventListener('change', () => {
-            if (profileTypeSelect.value === 'buyer') {
-                buyerForm.classList.remove('hidden');
-                sellerForm.classList.add('hidden');
-            } else {
-                buyerForm.classList.add('hidden');
-                sellerForm.classList.remove('hidden');
-            }
-        });
-
-        buyerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const user = firebase.auth().currentUser;
-            if (user) {
-                firebase.database().ref('users/' + user.uid).update({
-                    profileType: 'buyer',
-                    name: document.getElementById('buyer-name').value,
-                    phone: document.getElementById('buyer-phone').value,
-                    address: document.getElementById('buyer-address').value
-                }).then(() => {
-                    alert('Buyer profile updated successfully!');
-                    loadUserProfile();
-                    profileInfo.classList.remove('hidden');
-                    profileEdit.classList.add('hidden');
-                }).catch((error) => {
-                    console.error('Error updating profile:', error);
-                    alert('Failed to update profile. Please try again.');
-                });
-            }
-        });
-
-        sellerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const user = firebase.auth().currentUser;
-            if (user) {
-                firebase.database().ref('users/' + user.uid).update({
-                    profileType: 'seller',
-                    businessName: document.getElementById('seller-name').value,
-                    businessPhone: document.getElementById('seller-phone').value,
-                    businessAddress: document.getElementById('seller-address').value,
-                    taxId: document.getElementById('seller-tax-id').value,
-                    businessDescription: document.getElementById('seller-description').value
-                }).then(() => {
-                    alert('Seller profile updated successfully!');
-                    loadUserProfile();
-                    profileInfo.classList.remove('hidden');
-                    profileEdit.classList.add('hidden');
-                }).catch((error) => {
-                    console.error('Error updating profile:', error);
-                    alert('Failed to update profile. Please try again.');
-                });
-            }
-        });
-
-        // Reels functionality
         function loadReels() {
             reelsContainer.innerHTML = '';
             firebase.database().ref('Products').once('value').then((snapshot) => {
@@ -1395,13 +1416,14 @@
                                 <h3>${product.name}</h3>
                                 <p>${product.description}</p>
                                 <p>Price: $${product.price}</p>
+                                <p>Seller: ${product.seller || 'Unknown Seller'}</p>
                                 <a href="${product.link}" target="_blank" class="button">Buy Now</a>
                             </div>
                             <div class="reel-actions">
                                 <button class="reel-action-button like-button" data-product-id="${childSnapshot.key}"><i class="far fa-heart"></i></button>
                                 <button class="reel-action-button comment-button" data-product-id="${childSnapshot.key}"><i class="far fa-comment"></i></button>
                                 <button class="reel-action-button share-button" data-product-id="${childSnapshot.key}"><i class="far fa-share-square"></i></button>
-                                <button class="reel-action-button chat-button" data-seller="${product.seller}" onclick="openChat('${product.seller}')"><i class="fas fa-comment-dots"></i></button>
+                                <button class="reel-action-button chat-button" data-seller="${product.seller || 'Unknown Seller'}" onclick="openChat('${product.seller || 'Unknown Seller'}')"><i class="fas fa-comment-dots"></i></button>
                             </div>
                             <div class="reel-comments">
                                 <div class="comments-list"></div>
@@ -1413,8 +1435,8 @@
                         </div>
                     `;
                     reelsContainer.appendChild(reelItem);
+                    reelObserver.observe(reelItem);
 
-                    // Event listeners for reel actions
                     const video = reelItem.querySelector('.reel-video');
                     const commentButton = reelItem.querySelector('.comment-button');
                     const commentsSection = reelItem.querySelector('.reel-comments');
@@ -1454,8 +1476,7 @@
 
                     loadComments(childSnapshot.key, reelItem.querySelector('.comments-list'));
                 });
-
-                // Start playing the first video
+                
                 const firstVideo = reelsContainer.querySelector('.reel-video');
                 if (firstVideo) {
                     firstVideo.play();
@@ -1463,28 +1484,25 @@
             });
         }
 
-        // Intersection Observer for video autoplay
-        const videoObserver = new IntersectionObserver((entries) => {
+        const reelObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.play();
+                    entry.target.querySelector('.reel-video').play();
                 } else {
-                    entry.target.pause();
+                    entry.target.querySelector('.reel-video').pause();
                 }
             });
         }, { threshold: 0.5 });
 
-        // Observe all videos in the reels container
         reelsContainer.addEventListener('DOMNodeInserted', (event) => {
             if (event.target.classList && event.target.classList.contains('reel-item')) {
                 const video = event.target.querySelector('.reel-video');
                 if (video) {
-                    videoObserver.observe(video);
+                    reelObserver.observe(video);
                 }
             }
         });
 
-        // Search functionality
         searchInput.addEventListener('input', debounce(() => {
             const searchTerm = searchInput.value.toLowerCase();
             searchReels(searchTerm);
@@ -1520,12 +1538,10 @@
                 const likeRef = firebase.database().ref(`likes/${productId}/${user.uid}`);
                 likeRef.once('value').then((snapshot) => {
                     if (snapshot.exists()) {
-                        // User has already liked, so unlike
                         likeRef.remove();
                         likeButton.classList.remove('active');
                         likeButton.querySelector('i').classList.replace('fas', 'far');
                     } else {
-                        // User hasn't liked, so add like
                         likeRef.set(true);
                         likeButton.classList.add('active');
                         likeButton.querySelector('i').classList.replace('far', 'fas');
@@ -1537,7 +1553,6 @@
         }
 
         function shareProduct(productId) {
-            // For this example, we'll just copy the product link to clipboard
             const productLink = `https://yourdomain.com/product/${productId}`;
             navigator.clipboard.writeText(productLink).then(() => {
                 alert('Product link copied to clipboard!');
@@ -1600,12 +1615,12 @@
             const rewardsGrid = document.getElementById('rewards-grid');
             rewardsGrid.innerHTML = '';
             const rewards = [
-                { name: "Daily Bonus", description: "Claim your daily reward", icon: "fa-calendar-check", isNew: true },
-                { name: "Achievement Badge", description: "For completing 10 tasks", icon: "fa-medal", isNew: false },
-                { name: "Level Up Reward", description: "Reached level 5!", icon: "fa-level-up-alt", isNew: true },
-                { name: "Special Event Prize", description: "Winner of the weekly challenge", icon: "fa-award", isNew: false },
-                { name: "Loyalty Points", description: "Accumulated 1000 points", icon: "fa-star", isNew: false },
-                { name: "Mystery Box", description: "Random reward for active users", icon: "fa-box-open", isNew: true },
+                { name: "Daily Bonus", description: "Claim your daily reward", icon: "fa-calendar-check", isNew: true, rarity: "Common" },
+                { name: "Achievement Badge", description: "For completing 10 tasks", icon: "fa-medal", isNew: false, rarity: "Rare" },
+                { name: "Level Up Reward", description: "Reached level 5!", icon: "fa-level-up-alt", isNew: true, rarity: "Epic" },
+                { name: "Special Event Prize", description: "Winner of the weekly challenge", icon: "fa-award", isNew: false, rarity: "Legendary" },
+                { name: "Loyalty Points", description: "Accumulated 1000 points", icon: "fa-star", isNew: false, rarity: "Uncommon" },
+                { name: "Mystery Box", description: "Random reward for active users", icon: "fa-box-open", isNew: true, rarity: "Mythic" },
             ];
             rewards.forEach(reward => {
                 const card = document.createElement('div');
@@ -1619,6 +1634,7 @@
                         <button class="button"><i class="fas fa-gift"></i> CLAIM REWARD</button>
                     </div>
                     ${reward.isNew ? '<div class="new-banner">NEW!</div>' : ''}
+                    <div class="rarity-indicator">${reward.rarity}</div>
                 `;
                 rewardsGrid.appendChild(card);
                 observer.observe(card);
@@ -1652,7 +1668,6 @@
                 observer.observe(card);
             });
 
-            // Add event listeners to chat buttons
             document.querySelectorAll('.chat-button').forEach(button => {
                 button.addEventListener('click', (e) => {
                     const seller = e.target.getAttribute('data-seller');
@@ -1711,7 +1726,6 @@
             }
         }
 
-        // Intersection Observer for animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1724,10 +1738,8 @@
             });
         }, { threshold: 0.1 });
 
-        // Observe all fade-in elements
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Animate achievement numbers
         function animateCounter(counter) {
             const target = +counter.getAttribute('data-target');
             const count = +counter.innerText;
@@ -1741,43 +1753,11 @@
             }
         }
 
-        // Show view function
-        function showView(view) {
-            views.forEach(v => {
-                const element = document.getElementById(v);
-                if (element) {
-                    element.classList.add('hidden');
-                }
-            });
-            
-            const viewElement = document.getElementById(view);
-            if (viewElement) {
-                viewElement.classList.remove('hidden');
-            } else {
-                console.warn(`View "${view}" not found`);
-            }
-            
-            if (view === 'explore') {
-                loadReels();
-            } else if (view === 'loot') {
-                loadOfferCards();
-            } else if (view === 'rewards') {
-                loadRewards();
-            } else if (view === 'marketplace') {
-                loadMarketplace();
-            }
-            
-            sidebar.classList.remove('open');
-            document.querySelector('.container').style.paddingLeft = '20px';
-        }
-
-        // Toggle sidebar function
         function toggleSidebar() {
             sidebar.classList.toggle('open');
             document.querySelector('.container').style.paddingLeft = sidebar.classList.contains('open') ? '270px' : '20px';
         }
 
-        // Category filter functionality
         categoryButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const category = button.getAttribute('data-category');
@@ -1798,14 +1778,12 @@
             });
         }
 
-        // Light mode toggle
         darkModeToggle.addEventListener('change', () => {
             document.body.classList.toggle('light-mode');
             const isLightMode = document.body.classList.contains('light-mode');
             localStorage.setItem('lightMode', isLightMode);
         });
 
-        // Check user's preference on load
         const savedLightMode = localStorage.getItem('lightMode');
         if (savedLightMode === 'true') {
             document.body.classList.add('light-mode');
@@ -1815,7 +1793,6 @@
             darkModeToggle.checked = false;
         }
 
-        // Profile picture upload
         profilePictureUpload.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -1827,7 +1804,6 @@
             }
         });
 
-        // Edit username
         editUsernameButton.addEventListener('click', () => {
             const newUsername = prompt('Enter new username:');
             if (newUsername) {
@@ -1835,12 +1811,10 @@
             }
         });
 
-        // Cart functionality
         cartIcon.addEventListener('click', () => {
             alert(`You have ${cartItems.length} item(s) in your cart.`);
         });
 
-        // Make chat container draggable
         let isDragging = false;
         let dragOffsetX, dragOffsetY;
 
@@ -1855,7 +1829,6 @@
                 const newLeft = e.clientX - dragOffsetX;
                 const newTop = e.clientY - dragOffsetY;
                 
-                // Ensure the chat container stays within the viewport
                 const maxX = window.innerWidth - chatContainer.offsetWidth;
                 const maxY = window.innerHeight - chatContainer.offsetHeight;
                 
@@ -1868,10 +1841,8 @@
             isDragging = false;
         });
 
-        // Initial load
         showView('landing');
 
-        // Additional chat functionality 
         closeChat.addEventListener('click', () => {
             chatContainer.style.display = 'none';
         });
@@ -1885,7 +1856,6 @@
                 chatMessages.appendChild(messageElement);
                 chatInput.value = '';
                 
-                // Simulate a response (you can replace this with actual backend logic)
                 setTimeout(() => {
                     const responseElement = document.createElement('div');
                     responseElement.className = 'chat-message received';
