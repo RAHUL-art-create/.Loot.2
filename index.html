@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -22,10 +21,18 @@
             color: var(--text-color);
             min-height: 100vh;
         }
+        body.light-mode {
+            --primary-color: #dfbdbb;
+            --secondary-color: #ffffff;
+            --text-color: #333333;
+            --background-color: #f5f5f5;
+            --card-color: rgba(0, 0, 0, 0.05);
+        }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px;
+            transition: padding-left 0.3s ease-in-out;
         }
         .hidden {
             display: none;
@@ -51,6 +58,7 @@
             display: flex;
             align-items: center;
             cursor: pointer;
+            margin: 0 auto;
         }
         .logo img {
             height: 40px;
@@ -61,12 +69,13 @@
             backdrop-filter: blur(10px);
             width: 250px;
             position: fixed;
-            top: 0;
+            top: 80px;
             left: -250px;
-            height: 100%;
+            height: calc(100% - 80px);
             transition: left 0.3s ease-in-out;
             z-index: 1000;
             box-shadow: 2px 0 10px rgba(223, 189, 187, 0.1);
+            overflow-y: auto;
         }
         .sidebar.open {
             left: 0;
@@ -100,6 +109,8 @@
             box-shadow: 0 4px 6px rgba(223, 189, 187, 0.1);
             transition: transform 0.3s, box-shadow 0.3s;
             backdrop-filter: blur(10px);
+            max-width: 1000px;
+            margin: 0 auto;
         }
         .main-content:hover {
             transform: translateY(-5px);
@@ -139,6 +150,7 @@
             letter-spacing: 1px;
             display: inline-block;
             text-decoration: none;
+            margin-right: 10px;
         }
         .button:hover {
             background-color: var(--text-color);
@@ -153,14 +165,14 @@
             display: flex;
             flex-direction: column;
         }
-        input, textarea, select {
+        select, input, textarea {
             margin-bottom: 15px;
             padding: 10px;
             border: 1px solid var(--primary-color);
             border-radius: 5px;
             font-size: 16px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: var(--text-color);
+            background-color: var(--card-color);
+            color: #000000;
         }
         .landing {
             text-align: center;
@@ -290,6 +302,11 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            position: sticky;
+            top: 80px;
+            z-index: 100;
+            background-color: var(--background-color);
+            padding: 10px 0;
         }
         .search-container {
             flex-grow: 1;
@@ -314,30 +331,27 @@
             width: 100%;
         }
         .reels-container {
-            position: fixed;
-            top: 0;
-            left: 0;
+            position: relative;
             width: 100%;
-            height: 100%;
-            background-color: rgba(1, 1, 1, 0.9);
-            z-index: 2000;
+            height: calc(100vh - 80px);
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
         }
         .reel-item {
             position: relative;
             width: 100%;
-            height: 100vh;
+            height: 100%;
             scroll-snap-align: start;
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-bottom: 20px;
         }
         .reel-video-container {
             position: relative;
             width: 100%;
-            max-width: 315px;
-            height: 560px;
+            max-width: 400px;
+            height: 70vh;
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(223, 189, 187, 0.2);
@@ -396,13 +410,13 @@
         .reel-comments.show {
             transform: translateY(0);
         }
-        .close-reels {
+        .back-button {
             position: fixed;
             top: 20px;
             left: 20px;
             background: none;
             border: none;
-            color: var(--text-color);
+            color:  var(--text-color);
             font-size: 24px;
             cursor: pointer;
             z-index: 2001;
@@ -436,7 +450,7 @@
         }
         .reward-card {
             background-color: var(--card-color);
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 4px 6px rgba(223, 189, 187, 0.1);
             padding: 20px;
             text-align: center;
@@ -447,6 +461,7 @@
             transition: transform 0.3s, box-shadow 0.3s;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(15px);
         }
         .reward-card:hover {
             transform: translateY(-5px);
@@ -484,6 +499,7 @@
             font-size: 18px;
             color: var(--primary-color);
             cursor: pointer;
+            backdrop-filter: blur(20px);
         }
         .reward-card .new-banner {
             position: absolute;
@@ -496,59 +512,211 @@
             font-size: 12px;
             font-weight: bold;
         }
-        .ondc-badge {
-            background-color: var(--primary-color);
-            color: var(--secondary-color);
-            padding: 5px 10px;
-            border-radius: 15px;
+        .reward-card .rarity-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             font-size: 12px;
             font-weight: bold;
-            margin-left: 10px;
-        }
-        .filter-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .filter-button {
-            background-color: var(--card-color);
-            color: var(--text-color);
-            border: none;
-            padding: 10px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .filter-button:hover, .filter-button.active {
+            padding: 5px 10px;
+            border-radius: 10px;
             background-color: var(--primary-color);
             color: var(--secondary-color);
         }
-        .ondc-features {
+        .chat-container {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
             background-color: var(--card-color);
             border-radius: 10px;
-            padding: 20px;
+            overflow: hidden;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(223, 189, 187, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 10px;
+            font-weight: bold;
+            cursor: move;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100% - 100px);
+        }
+        .chat-message {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 18px;
+            margin-bottom: 8px;
+            word-wrap: break-word;
+        }
+        .chat-message.sent {
+            align-self: flex-end;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+        }
+        .chat-message.received {
+            align-self: flex-start;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        .chat-input input {
+            flex-grow: 1;
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            padding: 5px;
+        }
+        .chat-input button {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .settings-section {
             margin-top: 20px;
         }
-        .ondc-features h3 {
+        .settings-section h3 {
             color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-        .ondc-features ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .ondc-features li {
             margin-bottom: 10px;
-            display: flex;
-            align-items: center;
         }
-        .ondc-features li i {
-            color: var(--primary-color);
-            margin-right: 10px;
+        .settings-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .category-button {
+            margin: 5px;
+            padding: 8px 15px;
+            background-color: var(--card-color);
+            border: none;
+            border-radius: 20px;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .category-button:hover {
+            transform: translateY(-2px);
+        }
+        .category-button.active {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+        }
+        .marketplace-card-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .marketplace-card-buttons .button {
+            padding: 5px 10px;
+            font-size: 12px;
+            flex: 1;
+            margin: 0 5px;
+        }
+        #marketplace .search-container {
+            margin-bottom: 20px;
+        }
+        #marketplace .search-input {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            display: block;
+        }
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+        .cart-modal-content {
+            background-color: var(--card-color);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 100%;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .cart-total {
+            font-weight: bold;
+            margin-top: 10px;
         }
         @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 0 20px;
             }
             .grid {
                 grid-template-columns: 1fr;
@@ -579,9 +747,16 @@
                 max-width: none;
                 border-radius: 0;
             }
-            .close-reels {
+            .back-button {
                 top: 10px;
                 left: 10px;
+            }
+            .chat-container {
+                width: 100%;
+                height: 50vh;
+                bottom: 0;
+                right: 0;
+                resize: none;
             }
         }
     </style>
@@ -592,6 +767,10 @@
         <div class="logo" id="logo">
             <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/183277166-bbt3McRL2ZnhJZGVq4RcM3vdT8sLdV.png" alt="Loot Logo">
             <h1>Loot</h1>
+        </div>
+        <div class="cart-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
         </div>
         <span id="user-email"></span>
     </div>
@@ -612,7 +791,7 @@
     </div>
 
     <div class="container">
-        <div id="landing">
+        <div id="landing" class="main-content">
             <div class="landing fade-in">
                 <h2>Welcome to Loot</h2>
                 <p>Discover amazing products, earn rewards, and enjoy exclusive deals!</p>
@@ -671,7 +850,195 @@
             </div>
         </div>
 
-        <div id="login-signup" class="main-content hidden fade-in">
+        <div id="explore" class="main-content hidden">
+            <button class="back-button" onclick="showView('landing')"><i class="fas fa-arrow-left"></i></button>
+            <div class="explore-header">
+                <h2><i class="fas fa-search"></i> Explore Reels</h2>
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-input" placeholder="Search reels...">
+                </div>
+            </div>
+            <div id="reels-container" class="reels-container"></div>
+        </div>
+
+        <div id="loot" class="main-content hidden">
+            <h2><i class="fas fa-gift"></i> Loot Deals</h2>
+            <div id="offer-cards-grid" class="grid"></div>
+        </div>
+
+        <div id="shop" class="main-content hidden">
+            <h2><i class="fas fa-store"></i> Shop Management</h2>
+            <div class="card">
+                <div class="card-content">
+                    <h3>Upload Product</h3>
+                    <form id="upload-product-form">
+                        <input type="text" id="product-name" placeholder="Product Name" required>
+                        <textarea id="product-description" placeholder="Description" required></textarea>
+                        <input type="file" id="product-video" accept="video/*" required>
+                        <input type="url" id="product-link" placeholder="Product Link" required>
+                        <input type="number" id="product-price" placeholder="Price" step="0.01" required>
+                        <div class="product-upload">
+                            <label for="product-image">
+                                <i class="fas fa-upload"></i> Upload Product Image
+                            </label>
+                            <input type="file" id="product-image" accept="image/*">
+                        </div>
+                        <div class="stock-images">
+                            <img src="/placeholder.svg?height=100&width=100" alt="Stock Image 1" class="stock-image">
+                            <img src="/placeholder.svg?height=100&width=100" alt="Stock Image 2" class="stock-image">
+                            <img src="/placeholder.svg?height=100&width=100" alt="Stock Image 3" class="stock-image">
+                        </div>
+                        <button type="submit" class="button"><i class="fas fa-upload"></i> Upload Product</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <h3>Upload Offer</h3>
+                    <form id="upload-offer-form">
+                        <input type="text" id="offer-name" placeholder="Offer Name" required>
+                        <textarea id="offer-description" placeholder="Offer Description" required></textarea>
+                        <input type="number" id="offer-discount" placeholder="Discount Percentage" min="0" max="100" required>
+                        <input type="date" id="offer-expiry" placeholder="Expiry Date" required>
+                        <input type="file" id="offer-image" accept="image/*" required>
+                        <button type="submit" class="button"><i class="fas fa-tag"></i> Upload Offer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="rewards" class="main-content hidden">
+            <h2><i class="fas fa-trophy"></i> Your Rewards</h2>
+            <div id="rewards-grid" class="rewards-grid"></div>
+        </div>
+
+        <div id="account" class="main-content hidden">
+            <h2><i class="fas fa-user"></i> Account <span class="edit-profile" id="edit-profile"><i class="fas fa-edit"></i></span></h2>
+            <div id="profile-info">
+                <img src="/placeholder.svg?height=100&width=100" alt="Profile Picture" class="profile-picture" id="profile-picture">
+                <input type="file" id="profile-picture-upload" class="profile-picture-upload" accept="image/*">
+                <label for="profile-picture-upload" class="profile-picture-label">Change Profile Picture</label>
+                <p><strong>Email:</strong> <span id="account-email"></span></p>
+                <p><strong>Username:</strong> <span id="account-username"></span> <button id="edit-username" class="button">Edit</button></p>
+                <p><strong>Profile Type:</strong> <span id="profile-type">Not Set</span></p>
+            </div>
+            <div id="profile-edit" class="hidden">
+                <div class="profile-type-selection">
+                    <h3>Select Profile Type:</h3>
+                    <select id="profile-type-select">
+                        <option value="buyer">Buyer</option>
+                        <option value="seller">Seller</option>
+                    </select>
+                </div>
+                <form id="buyer-form" class="hidden">
+                    <input type="text" id="buyer-name" placeholder="Full Name" required>
+                    <input type="tel" id="buyer-phone" placeholder="Phone Number" required>
+                    <input type="text" id="buyer-address" placeholder="Shipping Address" required>
+                    <button type="submit" class="button">Save Buyer Profile</button>
+                </form>
+                <form id="seller-form" class="hidden">
+                    <input type="text" id="seller-name" placeholder="Business Name" required>
+                    <input type="tel" id="seller-phone" placeholder="Business Phone" required>
+                    <input type="text" id="seller-address" placeholder="Business Address" required>
+                    <input type="text" id="seller-tax-id" placeholder="Tax ID" required>
+                    <textarea id="seller-description" placeholder="Business Description" required></textarea>
+                    <button type="submit" class="button">Save Seller Profile</button>
+                </form>
+            </div>
+            <div class="settings-section">
+                <h3>Settings</h3>
+                <div class="settings-option">
+                    <span>Light Mode <i class="fas fa-info-circle" title="Toggle between light and dark mode for better visibility"></i></span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-option">
+                    <span>Notifications <i class="fas fa-info-circle" title="Receive notifications about new offers and rewards"></i></span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="notifications-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-option">
+                    <span>Two-Factor Authentication <i class="fas fa-info-circle" title="Enhance account security with 2FA"></i></span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="two-factor-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-option">
+                    <span>Language <i class="fas fa-info-circle" title="Choose your preferred language"></i></span>
+                    <select id="language-select">
+                        <option value="en">English</option>
+                        <option value="hi">हिन्दी (Hindi)</option>
+                        <option value="bn">বাংলা (Bengali)</option>
+                        <option value="te">తెలుగు (Telugu)</option>
+                        <option value="mr">मराठी (Marathi)</option>
+                        <option value="ta">தமிழ் (Tamil)</option>
+                        <option value="ur">اردو (Urdu)</option>
+                        <option value="gu">ગુજરાતી (Gujarati)</option>
+                        <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                        <option value="ml">മലയാളം (Malayalam)</option>
+                        <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                    </select>
+                </div>
+                <h3>Loot Settings</h3>
+                <div class="settings-option">
+                    <span>Auto-claim Daily Rewards <i class="fas fa-info-circle" title="Automatically claim your daily rewards"></i></span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="auto-claim-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-option">
+                    <span>Reward Notifications <i class="fas fa-info-circle" title="Get notified when new rewards are available"></i></span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="reward-notifications-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-option">
+                    <span>Loot Rarity Display <i class="fas fa-info-circle" title="Choose how loot rarity is displayed"></i></span>
+                    <select id="loot-rarity-display">
+                        <option value="text">Text</option>
+                        <option value="color">Color</option>
+                        <option value="both">Both</option>
+                    </select>
+                </div>
+                <div class="settings-option">
+                    <span>Wishlist Notifications <i class="fas fa-info-circle" title="Get notified when wishlist items are on sale"></i></span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="wishlist-notifications-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-option">
+                    <span>Price Alerts <i class="fas fa-info-circle" title="Set price alerts for products you're interested in"></i></span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="price-alerts-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="marketplace" class="main-content hidden">
+            <h2><i class="fas fa-shopping-basket"></i> ONDC Marketplace</h2>
+            <div class="search-container">
+                <input type="text" id="marketplace-search" class="search-input" placeholder="Search products or sellers...">
+            </div>
+            <div class="category-filter">
+                <button class="category-button active" data-category="all">All</button>
+                <button class="category-button" data-category="local">Local Artisans</button>
+                <button class="category-button" data-category="organic">Organic Products</button>
+                <button class="category-button" data-category="eco">Eco-friendly</button>
+            </div>
+            <div id="marketplace-grid" class="grid"></div>
+        </div>
+
+        <div id="login-signup" class="main-content hidden">
             <h2>Sign In</h2>
             <form id="login-form">
                 <input type="email" id="login-email" placeholder="Email" required>
@@ -681,7 +1048,7 @@
             <p>Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
         </div>
 
-        <div id="signup-form" class="main-content hidden fade-in">
+        <div id="signup-form" class="main-content hidden">
             <h2>Sign Up</h2>
             <form id="signup-form">
                 <input type="text" id="signup-name" placeholder="Name" required>
@@ -691,113 +1058,17 @@
             </form>
             <p>Already have an account? <a href="#" id="show-login">Sign In</a></p>
         </div>
+    </div>
 
-        <div id="dashboard">
-            <div id="explore" class="main-content fade-in">
-                <div class="explore-header">
-                    <h2><i class="fas fa-search"></i> Explore</h2>
-                    <div class="search-container">
-                        <input type="text" id="search-input" class="search-input" placeholder="Search products...">
-                    </div>
-                    <button id="open-reels" class="button"><i class="fas fa-film"></i> View Reels</button>
-                </div>
-                <div id="products-grid" class="grid"></div>
-            </div>
-
-            <div id="loot" class="main-content hidden fade-in">
-                <h2><i class="fas fa-gift"></i> Loot Deals</h2>
-                <div id="offer-cards-grid" class="grid"></div>
-            </div>
-
-            <div id="shop" class="main-content hidden fade-in">
-                <h2><i class="fas fa-store"></i> Shop Management</h2>
-                <div class="card">
-                    <div class="card-content">
-                        <h3>Upload Product</h3>
-                        <form id="upload-product-form">
-                            <input type="text" id="product-name" placeholder="Product Name" required>
-                            <textarea id="product-description" placeholder="Description" required></textarea>
-                            <input type="file" id="product-video" accept="video/*" required>
-                            <input type="url" id="product-link" placeholder="Product Link" required>
-                            <input type="number" id="product-price" placeholder="Price" step="0.01" required>
-                            <button type="submit" class="button"><i class="fas fa-upload"></i> Upload Product</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-content">
-                        <h3>Upload Offer</h3>
-                        <form id="upload-offer-form">
-                            <input type="text" id="offer-name" placeholder="Offer Name" required>
-                            <textarea id="offer-description" placeholder="Offer Description" required></textarea>
-                            <input type="number" id="offer-discount" placeholder="Discount Percentage" min="0" max="100" required>
-                            <input type="date" id="offer-expiry" placeholder="Expiry Date" required>
-                            <input type="file" id="offer-image" accept="image/*" required>
-                            <button type="submit" class="button"><i class="fas fa-tag"></i> Upload Offer</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div id="rewards" class="main-content hidden fade-in">
-                <h2><i class="fas fa-trophy"></i> Your Rewards</h2>
-                <div id="rewards-grid" class="rewards-grid"></div>
-            </div>
-
-            <div id="account" class="main-content hidden fade-in">
-                <h2><i class="fas fa-user"></i> Account <span class="edit-profile" id="edit-profile"><i class="fas fa-edit"></i></span></h2>
-                <div id="profile-info">
-                    <p><strong>Email:</strong> <span id="account-email"></span></p>
-                    <p><strong>Profile Type:</strong> <span id="profile-type">Not Set</span></p>
-                </div>
-                <div id="profile-edit" class="hidden">
-                    <div class="profile-type-selection">
-                        <h3>Select Profile Type:</h3>
-                        <select id="profile-type-select">
-                            <option value="buyer">Buyer</option>
-                            <option value="seller">Seller</option>
-                        </select>
-                    </div>
-                    <form id="buyer-form" class="hidden">
-                        <input type="text" id="buyer-name" placeholder="Full Name" required>
-                        <input type="tel" id="buyer-phone" placeholder="Phone Number" required>
-                        <input type="text" id="buyer-address" placeholder="Shipping Address" required>
-                        <button type="submit" class="button">Save Buyer Profile</button>
-                    </form>
-                    <form id="seller-form" class="hidden">
-                        <input type="text" id="seller-name" placeholder="Business Name" required>
-                        <input type="tel" id="seller-phone" placeholder="Business Phone" required>
-                        <input type="text" id="seller-address" placeholder="Business Address" required>
-                        <input type="text" id="seller-tax-id" placeholder="Tax ID" required>
-                        <textarea id="seller-description" placeholder="Business Description" required></textarea>
-                        <button type="submit" class="button">Save Seller Profile</button>
-                    </form></div>
-            </div>
-
-            <div id="marketplace" class="main-content hidden fade-in">
-                <h2><i class="fas fa-shopping-basket"></i> ONDC Marketplace</h2>
-                <div class="filter-container">
-                    <button class="filter-button active" data-category="all">All</button>
-                    <button class="filter-button" data-category="local">Local Artisans</button>
-                    <button class="filter-button" data-category="organic">Organic Products</button>
-                    <button class="filter-button" data-category="eco">Eco-friendly</button>
-                </div>
-                <div id="marketplace-grid" class="grid"></div>
-                <div class="ondc-features">
-                    <h3>ONDC Benefits</h3>
-                    <ul>
-                        <li><i class="fas fa-check-circle"></i> Direct connection with local sellers</li>
-                        <li><i class="fas fa-check-circle"></i> Transparent pricing and policies</li>
-                        <li><i class="fas fa-check-circle"></i> Support for small businesses</li>
-                        <li><i class="fas fa-check-circle"></i> Wider product variety</li>
-                    </ul>
-                </div>
-            </div>
+    <div id="chat-container" class="chat-container">
+        <div class="chat-header">
+            <span id="chat-title">Chat with Seller</span>
+            <button id="close-chat">&times;</button>
         </div>
-
-        <div id="reels-container" class="reels-container hidden">
-            <button class="close-reels" id="close-reels"><i class="fas fa-arrow-left"></i></button>
-            <!-- Reel items will be dynamically added here -->
+        <div id="chat-messages" class="chat-messages"></div>
+        <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Type a message...">
+            <button id="send-message">Send</button>
         </div>
     </div>
 
@@ -807,7 +1078,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
     <script>
-        // Initialize Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyClf6W3B2nesvjfZtRSMcjbt6NRp6uy-Po",
             authDomain: "lootbase-4d01f.firebaseapp.com",
@@ -820,13 +1090,11 @@
         };
         firebase.initializeApp(firebaseConfig);
 
-        // DOM Elements
-        const landingDiv = document.getElementById('landing');
         const loginSignupDiv = document.getElementById('login-signup');
         const signupFormDiv = document.getElementById('signup-form');
-        const dashboardDiv = document.getElementById('dashboard');
         const userEmailSpan = document.getElementById('user-email');
         const accountEmailSpan = document.getElementById('account-email');
+        const accountUsernameSpan = document.getElementById('account-username');
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebar-toggle');
         const closeSidebar = document.getElementById('close-sidebar');
@@ -847,41 +1115,146 @@
         const profileTypeSelect = document.getElementById('profile-type-select');
         const buyerForm = document.getElementById('buyer-form');
         const sellerForm = document.getElementById('seller-form');
-        const views = ['explore', 'loot', 'shop', 'rewards', 'account', 'marketplace'];
-        const openReelsButton = document.getElementById('open-reels');
         const reelsContainer = document.getElementById('reels-container');
-        const closeReelsButton = document.getElementById('close-reels');
         const searchInput = document.getElementById('search-input');
-        const filterButtons = document.querySelectorAll('.filter-button');
+        const marketplaceSearch = document.getElementById('marketplace-search');
+        const chatContainer = document.getElementById('chat-container');
+        const closeChat = document.getElementById('close-chat');
+        const sendMessage = document.getElementById('send-message');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+        const categoryButtons = document.querySelectorAll('.category-button');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const profilePicture = document.getElementById('profile-picture');
+        const profilePictureUpload = document.getElementById('profile-picture-upload');
+        const editUsernameButton = document.getElementById('edit-username');
+        const cartIcon = document.querySelector('.cart-icon');
+        const cartCount = document.querySelector('.cart-count');
 
-        // Event Listeners and Functions
+        let cartItems = [];
 
-        // Close reels when clicking outside on desktop
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('#reels-container') === null && !e.target.matches('#open-reels')) {
-                reelsContainer.classList.add('hidden');
+        const views = ['landing', 'explore', 'loot', 'shop', 'rewards', 'account', 'marketplace', 'login-signup', 'signup-form'];
+
+        const marketplaceItems = [
+            { name: "Local Artisan Crafts", description: "Handmade products from local artisans", price: 50, seller: "Craft Co-op", category: "local" },
+            { name: "Fresh Farm Produce", description: "Organic vegetables and fruits", price: 30, seller: "Green Farms", category: "organic" },
+            { name: "Eco-friendly Home Goods", description: "Sustainable household items", price: 40, seller: "EcoHome", category: "eco" },
+            { name: "Regional Specialties", description: "Unique food items from different regions", price: 25, seller: "Tasty Traditions", category: "local" },
+            { name: "Handwoven Textiles", description: "Traditional handloom fabrics", price: 60, seller: "Weaver's Collective", category: "local" },
+            { name: "Organic Honey", description: "Pure, unprocessed honey", price: 15, seller: "Bee Natural", category: "organic" },
+            { name: "Recycled Paper Products", description: "Notebooks and stationery made from recycled paper", price: 20, seller: "Green Paper Co.", category: "eco" },
+            { name: "Artisanal Cheese", description: "Locally produced gourmet cheese", price: 35, seller: "Dairy Delights", category: "local" },
+            { name: "Bamboo Kitchenware", description: "Eco-friendly kitchen utensils", price: 45, seller: "Bamboo Living", category: "eco" },
+            { name: "Herbal Tea Blends", description: "Organic herbal tea assortments", price: 18, seller: "Tea Haven", category: "organic" },
+        ];
+
+        function showView(view) {
+            views.forEach(v => {
+                const element = document.getElementById(v);
+                if (element) {
+                    element.classList.add('hidden');
+                }
+            });
+            
+            const viewElement = document.getElementById(view);
+            if (viewElement) {
+                viewElement.classList.remove('hidden');
+            } else {
+                console.warn(`View "${view}" not found`);
             }
+            
+            if (view === 'explore') {
+                loadReels();
+            } else if (view === 'loot') {
+                loadOfferCards();
+            } else if (view === 'rewards') {
+                loadRewards();
+            } else if (view === 'marketplace') {
+                loadMarketplace();
+            } else if (view === 'account') {
+                loadUserProfile();
+            }
+            
+            sidebar.classList.remove('open');
+            document.querySelector('.container').style.paddingLeft = '20px';
+        }
+
+        viewButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const view = button.getAttribute('data-view');
+                showView(view);
+            });
         });
 
-        // Firebase Auth
-        firebase.auth().onAuthStateChanged((user) => {
+        function loadUserProfile() {
+            const user = firebase.auth().currentUser;
             if (user) {
                 userEmailSpan.textContent = user.email;
                 accountEmailSpan.textContent = user.email;
-                loginButton.classList.add('hidden');
-                logoutButton.classList.remove('hidden');
-                loadUserProfile();
-            } else {
-                userEmailSpan.textContent = '';
-                accountEmailSpan.textContent = '';
-                loginButton.classList.remove('hidden');
-                logoutButton.classList.add('hidden');
+                accountUsernameSpan.textContent = user.displayName || 'Not set';
             }
-        });
+        }
 
-        // Event Listeners
-        sidebarToggle.addEventListener('click', () => sidebar.classList.add('open'));
-        closeSidebar.addEventListener('click', () => sidebar.classList.remove('open'));
+        const exploreSection = document.getElementById('explore');
+        if (!exploreSection) {
+            const newExploreDiv = document.createElement('div');
+            newExploreDiv.id = 'explore';
+            newExploreDiv.className = 'main-content hidden';
+            newExploreDiv.innerHTML = `<!-- Explore content -->`;
+            document.querySelector('.container').appendChild(newExploreDiv);
+        }
+
+        const lootSection = document.getElementById('loot');
+        if (!lootSection) {
+            const newLootDiv = document.createElement('div');
+            newLootDiv.id = 'loot';
+            newLootDiv.className = 'main-content hidden';
+            newLootDiv.innerHTML = `<!-- Loot content -->`;
+            document.querySelector('.container').appendChild(newLootDiv);
+        }
+
+        const shopSection = document.getElementById('shop');
+        if (!shopSection) {
+            const newShopDiv = document.createElement('div');
+            newShopDiv.id = 'shop';
+            newShopDiv.className = 'main-content hidden';
+            newShopDiv.innerHTML = `<!-- Shop content -->`;
+            document.querySelector('.container').appendChild(newShopDiv);
+        }
+
+        const rewardsSection = document.getElementById('rewards');
+        if (!rewardsSection) {
+            const newRewardsDiv = document.createElement('div');
+            newRewardsDiv.id = 'rewards';
+            newRewardsDiv.className = 'main-content hidden';
+            newRewardsDiv.innerHTML = `<!-- Rewards content -->`;
+            document.querySelector('.container').appendChild(newRewardsDiv);
+        }
+
+        const accountSection = document.getElementById('account');
+        if (!accountSection) {
+            const newAccountDiv = document.createElement('div');
+            newAccountDiv.id = 'account';
+            newAccountDiv.className = 'main-content hidden';
+            newAccountDiv.innerHTML = `<!-- Account content -->`;
+            document.querySelector('.container').appendChild(newAccountDiv);
+        }
+
+        const marketplaceSection = document.getElementById('marketplace');
+        if (!marketplaceSection) {
+            const newMarketplaceDiv = document.createElement('div');
+            newMarketplaceDiv.id = 'marketplace';
+            newMarketplaceDiv.className = 'main-content hidden';
+            newMarketplaceDiv.innerHTML = `<!-- Marketplace content -->`;
+            document.querySelector('.container').appendChild(newMarketplaceDiv);
+        }
+
+        sidebarToggle.addEventListener('click', () => {
+            toggleSidebar();
+        });
+        closeSidebar.addEventListener('click', () => {
+            toggleSidebar();
+        });
         logoutButton.addEventListener('click', () => {
             firebase.auth().signOut();
         });
@@ -902,14 +1275,10 @@
         });
         getStartedButton.addEventListener('click', (e) => {
             e.preventDefault();
-            landingDiv.classList.add('hidden');
-            dashboardDiv.classList.remove('hidden');
-            document.getElementById('explore').classList.remove('hidden');
-            loadProducts();
+            showView('explore');
         });
         logo.addEventListener('click', () => {
-            views.forEach(view => document.getElementById(view).classList.add('hidden'));
-            document.getElementById('explore').classList.remove('hidden');
+            showView('landing');
         });
 
         loginForm.addEventListener('submit', (e) => {
@@ -919,6 +1288,7 @@
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then(() => {
                     loginSignupDiv.classList.add('hidden');
+                    showView('landing');
                 })
                 .catch((error) => alert('Login Error: ' + error.message));
         });
@@ -937,6 +1307,7 @@
                 })
                 .then(() => {
                     signupFormDiv.classList.add('hidden');
+                    showView('landing');
                 })
                 .catch((error) => alert('Signup Error: ' + error.message));
         });
@@ -950,10 +1321,11 @@
                 const video = document.getElementById('product-video').files[0];
                 const link = document.getElementById('product-link').value;
                 const price = document.getElementById('product-price').value;
-                
+                const image = document.getElementById('product-image').files[0];
+
                 const fileName = `${name}_${Date.now()}.mp4`;
                 const storageRef = firebase.storage().ref('productVideos/' + fileName);
-                
+
                 storageRef.put(video).then(() => {
                     return storageRef.getDownloadURL();
                 }).then((videoUrl) => {
@@ -968,7 +1340,7 @@
                 }).then(() => {
                     alert('Product uploaded successfully!');
                     uploadProductForm.reset();
-                    loadProducts();
+                    loadReels();
                 }).catch((error) => {
                     console.error('Error uploading product:', error);
                     alert('Failed to upload product. Please try again.');
@@ -987,10 +1359,10 @@
                 const discount = document.getElementById('offer-discount').value;
                 const expiry = document.getElementById('offer-expiry').value;
                 const image = document.getElementById('offer-image').files[0];
-                
+
                 const fileName = `${name}_${Date.now()}.jpg`;
                 const storageRef = firebase.storage().ref('offerImages/' + fileName);
-                
+
                 storageRef.put(image).then(() => {
                     return storageRef.getDownloadURL();
                 }).then((imageUrl) => {
@@ -1014,93 +1386,24 @@
             }
         });
 
-        viewButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const view = button.getAttribute('data-view');
-                views.forEach(v => {
-                    document.getElementById(v).classList.add('hidden');
-                });
-                document.getElementById(view).classList.remove('hidden');
-                sidebar.classList.remove('open');
-                if (view === 'marketplace') {
-                    loadMarketplace();
+        marketplaceSearch.addEventListener('input', searchMarketplace);
+
+        function searchMarketplace() {
+            const searchTerm = marketplaceSearch.value.toLowerCase();
+            const items = document.querySelectorAll('#marketplace-grid .card');
+            items.forEach(item => {
+                const itemName = item.querySelector('h3').textContent.toLowerCase();
+                const sellerName = item.querySelector('.seller-info').textContent.toLowerCase();
+                if (itemName.includes(searchTerm) || sellerName.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
                 }
             });
-        });
-
-        editProfileButton.addEventListener('click', () => {
-            profileInfo.classList.toggle('hidden');
-            profileEdit.classList.toggle('hidden');
-        });
-
-        profileTypeSelect.addEventListener('change', () => {
-            if (profileTypeSelect.value === 'buyer') {
-                buyerForm.classList.remove('hidden');
-                sellerForm.classList.add('hidden');
-            } else {
-                buyerForm.classList.add('hidden');
-                sellerForm.classList.remove('hidden');
-            }
-        });
-
-        buyerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const user = firebase.auth().currentUser;
-            if (user) {
-                firebase.database().ref('users/' + user.uid).update({
-                    profileType: 'buyer',
-                    name: document.getElementById('buyer-name').value,
-                    phone: document.getElementById('buyer-phone').value,
-                    address: document.getElementById('buyer-address').value
-                }).then(() => {
-                    alert('Buyer profile updated successfully!');
-                    loadUserProfile();
-                    profileInfo.classList.remove('hidden');
-                    profileEdit.classList.add('hidden');
-                }).catch((error) => {
-                    console.error('Error updating profile:', error);
-                    alert('Failed to update profile. Please try again.');
-                });
-            }
-        });
-
-        sellerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const user = firebase.auth().currentUser;
-            if (user) {
-                firebase.database().ref('users/' + user.uid).update({
-                    profileType: 'seller',
-                    businessName: document.getElementById('seller-name').value,
-                    businessPhone: document.getElementById('seller-phone').value,
-                    businessAddress: document.getElementById('seller-address').value,
-                    taxId: document.getElementById('seller-tax-id').value,
-                    businessDescription: document.getElementById('seller-description').value
-                }).then(() => {
-                    alert('Seller profile updated successfully!');
-                    loadUserProfile();
-                    profileInfo.classList.remove('hidden');
-                    profileEdit.classList.add('hidden');
-                }).catch((error) => {
-                    console.error('Error updating profile:', error);
-                    alert('Failed to update profile. Please try again.');
-                });
-            }
-        });
-
-        // Reels functionality
-        openReelsButton.addEventListener('click', () => {
-            reelsContainer.classList.remove('hidden');
-            loadReels();
-        });
-
-        closeReelsButton.addEventListener('click', () => {
-            reelsContainer.classList.add('hidden');
-        });
+        }
 
         function loadReels() {
-            reelsContainer.innerHTML = `
-                <button class="close-reels" id="close-reels"><i class="fas fa-arrow-left"></i></button>
-            `;
+            reelsContainer.innerHTML = '';
             firebase.database().ref('Products').once('value').then((snapshot) => {
                 snapshot.forEach((childSnapshot) => {
                     const product = childSnapshot.val();
@@ -1113,12 +1416,14 @@
                                 <h3>${product.name}</h3>
                                 <p>${product.description}</p>
                                 <p>Price: $${product.price}</p>
+                                <p>Seller: ${product.seller || 'Unknown Seller'}</p>
                                 <a href="${product.link}" target="_blank" class="button">Buy Now</a>
                             </div>
                             <div class="reel-actions">
                                 <button class="reel-action-button like-button" data-product-id="${childSnapshot.key}"><i class="far fa-heart"></i></button>
                                 <button class="reel-action-button comment-button" data-product-id="${childSnapshot.key}"><i class="far fa-comment"></i></button>
                                 <button class="reel-action-button share-button" data-product-id="${childSnapshot.key}"><i class="far fa-share-square"></i></button>
+                                <button class="reel-action-button chat-button" data-seller="${product.seller || 'Unknown Seller'}" onclick="openChat('${product.seller || 'Unknown Seller'}')"><i class="fas fa-comment-dots"></i></button>
                             </div>
                             <div class="reel-comments">
                                 <div class="comments-list"></div>
@@ -1130,8 +1435,8 @@
                         </div>
                     `;
                     reelsContainer.appendChild(reelItem);
+                    reelObserver.observe(reelItem);
 
-                    // Event listeners for reel actions
                     const video = reelItem.querySelector('.reel-video');
                     const commentButton = reelItem.querySelector('.comment-button');
                     const commentsSection = reelItem.querySelector('.reel-comments');
@@ -1171,11 +1476,58 @@
 
                     loadComments(childSnapshot.key, reelItem.querySelector('.comments-list'));
                 });
-
-                // Start playing the first video
+                
                 const firstVideo = reelsContainer.querySelector('.reel-video');
                 if (firstVideo) {
                     firstVideo.play();
+                }
+            });
+        }
+
+        const reelObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelector('.reel-video').play();
+                } else {
+                    entry.target.querySelector('.reel-video').pause();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        reelsContainer.addEventListener('DOMNodeInserted', (event) => {
+            if (event.target.classList && event.target.classList.contains('reel-item')) {
+                const video = event.target.querySelector('.reel-video');
+                if (video) {
+                    reelObserver.observe(video);
+                }
+            }
+        });
+
+        searchInput.addEventListener('input', debounce(() => {
+            const searchTerm = searchInput.value.toLowerCase();
+            searchReels(searchTerm);
+        }, 300));
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function searchReels(searchTerm) {
+            const reelItems = reelsContainer.querySelectorAll('.reel-item');
+            reelItems.forEach(item => {
+                const content = item.textContent.toLowerCase();
+                if (content.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
                 }
             });
         }
@@ -1186,12 +1538,10 @@
                 const likeRef = firebase.database().ref(`likes/${productId}/${user.uid}`);
                 likeRef.once('value').then((snapshot) => {
                     if (snapshot.exists()) {
-                        // User has already liked, so unlike
                         likeRef.remove();
                         likeButton.classList.remove('active');
                         likeButton.querySelector('i').classList.replace('fas', 'far');
                     } else {
-                        // User hasn't liked, so add like
                         likeRef.set(true);
                         likeButton.classList.add('active');
                         likeButton.querySelector('i').classList.replace('far', 'fas');
@@ -1203,7 +1553,6 @@
         }
 
         function shareProduct(productId) {
-            // For this example, we'll just copy the product link to clipboard
             const productLink = `https://yourdomain.com/product/${productId}`;
             navigator.clipboard.writeText(productLink).then(() => {
                 alert('Product link copied to clipboard!');
@@ -1238,88 +1587,6 @@
             });
         }
 
-        // Intersection Observer for video autoplay
-        const videoObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.play();
-                } else {
-                    entry.target.pause();
-                }
-            });
-        }, { threshold: 0.5 });
-
-        // Observe all videos in the reels container
-        reelsContainer.addEventListener('DOMNodeInserted', (event) => {
-            if (event.target.classList && event.target.classList.contains('reel-item')) {
-                const video = event.target.querySelector('.reel-video');
-                if (video) {
-                    videoObserver.observe(video);
-                }
-            }
-        });
-
-        // Search functionality
-        searchInput.addEventListener('input', debounce(() => {
-            const searchTerm = searchInput.value.toLowerCase();
-            searchProducts(searchTerm);
-        }, 300));
-
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        function searchProducts(searchTerm) {
-            const productsGrid = document.getElementById('products-grid');
-            productsGrid.innerHTML = '';
-            firebase.database().ref('Products').once('value').then((snapshot) => {
-                snapshot.forEach((childSnapshot) => {
-                    const product = childSnapshot.val();
-                    if (product.name.toLowerCase().includes(searchTerm) || product.description.toLowerCase().includes(searchTerm)) {
-                        const productCard = createProductCard(product);
-                        productsGrid.appendChild(productCard);
-                        observer.observe(productCard);
-                    }
-                });
-            });
-        }
-
-        function createProductCard(product) {
-            const productCard = document.createElement('div');
-            productCard.className = 'card fade-in';
-            productCard.innerHTML = `
-                <video src="${product.videoUrl}" controls class="card-image"></video>
-                <div class="card-content">
-                    <h3>${product.name}</h3>
-                    <p>${product.description}</p>
-                    <p>Price: $${product.price}</p>
-                    <a href="${product.link}" target="_blank" class="button"><i class="fas fa-shopping-cart"></i> Buy Now</a>
-                </div>
-            `;
-            return productCard;
-        }
-
-        function loadProducts() {
-            const productsGrid = document.getElementById('products-grid');
-            productsGrid.innerHTML = '';
-            firebase.database().ref('Products').once('value').then((snapshot) => {
-                snapshot.forEach((childSnapshot) => {
-                    const product = childSnapshot.val();
-                    const productCard = createProductCard(product);
-                    productsGrid.appendChild(productCard);
-                    observer.observe(productCard);
-                });
-            });
-        }
-
         function loadOfferCards() {
             const offerCardsGrid = document.getElementById('offer-cards-grid');
             offerCardsGrid.innerHTML = '';
@@ -1348,18 +1615,18 @@
             const rewardsGrid = document.getElementById('rewards-grid');
             rewardsGrid.innerHTML = '';
             const rewards = [
-                { name: "Daily Bonus", description: "Claim your daily reward", icon: "fa-calendar-check", isNew: true },
-                { name: "Achievement Badge", description: "For completing 10 tasks", icon: "fa-medal", isNew: false },
-                { name: "Level Up Reward", description: "Reached level 5!", icon: "fa-level-up-alt", isNew: true },
-                { name: "Special Event Prize", description: "Winner of the weekly challenge", icon: "fa-award", isNew: false },
-                { name: "Loyalty Points", description: "Accumulated 1000 points", icon: "fa-star", isNew: false },
-                { name: "Mystery Box", description: "Random reward for active users", icon: "fa-box-open", isNew: true },
+                { name: "Daily Bonus", description: "Claim your daily reward", icon: "fa-calendar-check", isNew: true, rarity: "Common" },
+                { name: "Achievement Badge", description: "For completing 10 tasks", icon: "fa-medal", isNew: false, rarity: "Rare" },
+                { name: "Level Up Reward", description: "Reached level 5!", icon: "fa-level-up-alt", isNew: true, rarity: "Epic" },
+                { name: "Special Event Prize", description: "Winner of the weekly challenge", icon: "fa-award", isNew: false, rarity: "Legendary" },
+                { name: "Loyalty Points", description: "Accumulated 1000 points", icon: "fa-star", isNew: false, rarity: "Uncommon" },
+                { name: "Mystery Box", description: "Random reward for active users", icon: "fa-box-open", isNew: true, rarity: "Mythic" },
             ];
             rewards.forEach(reward => {
                 const card = document.createElement('div');
                 card.className = 'reward-card fade-in';
                 card.innerHTML = `
-                    <div class="scratch-layer">Scratch to reveal</div>
+                    <div class="scratch-layer">Tap to reveal</div>
                     <div class="reward-content">
                         <i class="fas ${reward.icon}"></i>
                         <h3>${reward.name}</h3>
@@ -1367,95 +1634,98 @@
                         <button class="button"><i class="fas fa-gift"></i> CLAIM REWARD</button>
                     </div>
                     ${reward.isNew ? '<div class="new-banner">NEW!</div>' : ''}
+                    <div class="rarity-indicator">${reward.rarity}</div>
                 `;
                 rewardsGrid.appendChild(card);
                 observer.observe(card);
 
-                let scratchCount = 0;
                 card.addEventListener('click', () => {
-                    scratchCount++;
-                    if (scratchCount >= 3) {
-                        card.querySelector('.scratch-layer').style.display = 'none';
-                        card.querySelector('.reward-content').style.opacity = '1';
-                    }
+                    card.classList.add('scratched');
                 });
             });
         }
 
-        function loadUserProfile() {
-            const user = firebase.auth().currentUser;
-            if (user) {
-                firebase.database().ref('users/' + user.uid).once('value').then((snapshot) => {
-                    const userData = snapshot.val();
-                    if (userData) {
-                        document.getElementById('profile-type').textContent = userData.profileType || 'Not Set';
-                        if (userData.profileType === 'buyer') {
-                            document.getElementById('buyer-name').value = userData.name || '';
-                            document.getElementById('buyer-phone').value = userData.phone || '';
-                            document.getElementById('buyer-address').value = userData.address || '';
-                        } else if (userData.profileType === 'seller') {
-                            document.getElementById('seller-name').value = userData.businessName || '';
-                            document.getElementById('seller-phone').value = userData.businessPhone || '';
-                            document.getElementById('seller-address').value = userData.businessAddress || '';
-                            document.getElementById('seller-tax-id').value = userData.taxId || '';
-                            document.getElementById('seller-description').value = userData.businessDescription || '';
-                        }
-                    }
-                });
-            }
-        }
-
-        // ONDC Marketplace functionality
         function loadMarketplace() {
             const marketplaceGrid = document.getElementById('marketplace-grid');
             marketplaceGrid.innerHTML = '';
-            // Simulated ONDC marketplace data
-            const marketplaceItems = [
-                { name: "Handcrafted Pottery", description: "Unique ceramic pieces by local artisans", price: 50, category: "local" },
-                { name: "Organic Vegetables Box", description: "Fresh, locally sourced organic produce", price: 30, category: "organic" },
-                { name: "Bamboo Cutlery Set", description: "Eco-friendly alternative to plastic utensils", price: 25, category: "eco" },
-                { name: "Handwoven Textiles", description: "Traditional textiles made by local weavers", price: 40, category: "local" },
-                { name: "Organic Honey", description: "Pure, unprocessed honey from local beekeepers", price: 15, category: "organic" },
-                { name: "Recycled Paper Notebooks", description: "Environmentally friendly stationery", price: 10, category: "eco" },
-            ];
             marketplaceItems.forEach(item => {
                 const card = document.createElement('div');
-                card.className = `card fade-in ${item.category}`;
+                card.className = 'card fade-in';
+                card.setAttribute('data-category', item.category);
                 card.innerHTML = `
                     <div class="card-content">
-                        <h3>${item.name} <span class="ondc-badge">ONDC</span></h3>
+                        <h3>${item.name}</h3>
                         <p>${item.description}</p>
                         <p>Price: $${item.price}</p>
-                        <button class="button">Add to Cart</button>
+                        <div class="seller-info">Seller: ${item.seller}</div>
+                        <div class="marketplace-card-buttons">
+                            <button class="button" onclick="addToCart(${JSON.stringify(item)})">Add to Cart</button>
+                            <button class="button chat-button" data-seller="${item.seller}" onclick="openChat('${item.seller}')">Chat</button>
+                        </div>
                     </div>
                 `;
                 marketplaceGrid.appendChild(card);
                 observer.observe(card);
             });
+
+            document.querySelectorAll('.chat-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const seller = e.target.getAttribute('data-seller');
+                    openChat(seller);
+                    chatContainer.style.display = 'flex';
+                });
+            });
         }
 
-        // Filter functionality for ONDC Marketplace
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const category = button.getAttribute('data-category');
-                filterMarketplace(category);
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-            });
+        function addToCart(item) {
+            cartItems.push(item);
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const cartCount = document.querySelector('.cart-count');
+            cartCount.textContent = cartItems.length;
+        }
+
+        cartIcon.addEventListener('click', () => {
+            showCartItems();
         });
 
-        function filterMarketplace(category) {
-            const items = document.querySelectorAll('#marketplace-grid .card');
-            items.forEach(item => {
-                if (category === 'all' || item.classList.contains(category)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+        function showCartItems() {
+            let cartContent = cartItems.map(item => `
+                <div class="cart-item">
+                    <span>${item.name}</span>
+                    <span>$${item.price}</span>
+                </div>
+            `).join('');
+            
+            if (cartItems.length === 0) {
+                cartContent = '<p>Your cart is empty</p>';
+            }
+            
+            const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+            
+            const cartModal = document.createElement('div');
+            cartModal.className = 'cart-modal';
+            cartModal.innerHTML = `
+                <div class="cart-modal-content">
+                    <h3>Your Cart</h3>
+                    ${cartContent}
+                    <div class="cart-total">Total: $${total.toFixed(2)}</div>
+                    <button class="button" onclick="closeCartModal()">Close</button>
+                </div>
+            `;
+            
+            document.body.appendChild(cartModal);
         }
 
-        // Intersection Observer for animations
+        function closeCartModal() {
+            const cartModal = document.querySelector('.cart-modal');
+            if (cartModal) {
+                cartModal.remove();
+            }
+        }
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1468,10 +1738,8 @@
             });
         }, { threshold: 0.1 });
 
-        // Observe all fade-in elements
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Animate achievement numbers
         function animateCounter(counter) {
             const target = +counter.getAttribute('data-target');
             const count = +counter.innerText;
@@ -1485,11 +1753,124 @@
             }
         }
 
-        // Initial load
-        loadProducts();
-        loadOfferCards();
-        loadRewards();
-        loadMarketplace();
+        function toggleSidebar() {
+            sidebar.classList.toggle('open');
+            document.querySelector('.container').style.paddingLeft = sidebar.classList.contains('open') ? '270px' : '20px';
+        }
+
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.getAttribute('data-category');
+                filterMarketplace(category);
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        function filterMarketplace(category) {
+            const items = document.querySelectorAll('#marketplace-grid .card');
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        darkModeToggle.addEventListener('change', () => {
+            document.body.classList.toggle('light-mode');
+            const isLightMode = document.body.classList.contains('light-mode');
+            localStorage.setItem('lightMode', isLightMode);
+        });
+
+        const savedLightMode = localStorage.getItem('lightMode');
+        if (savedLightMode === 'true') {
+            document.body.classList.add('light-mode');
+            darkModeToggle.checked = true;
+        } else {
+            document.body.classList.remove('light-mode');
+            darkModeToggle.checked = false;
+        }
+
+        profilePictureUpload.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    profilePicture.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        editUsernameButton.addEventListener('click', () => {
+            const newUsername = prompt('Enter new username:');
+            if (newUsername) {
+                accountUsernameSpan.textContent = newUsername;
+            }
+        });
+
+        cartIcon.addEventListener('click', () => {
+            alert(`You have ${cartItems.length} item(s) in your cart.`);
+        });
+
+        let isDragging = false;
+        let dragOffsetX, dragOffsetY;
+
+        chatContainer.querySelector('.chat-header').addEventListener('mousedown', (e) => {
+            isDragging = true;
+            dragOffsetX = e.clientX - chatContainer.offsetLeft;
+            dragOffsetY = e.clientY - chatContainer.offsetTop;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const newLeft = e.clientX - dragOffsetX;
+                const newTop = e.clientY - dragOffsetY;
+                
+                const maxX = window.innerWidth - chatContainer.offsetWidth;
+                const maxY = window.innerHeight - chatContainer.offsetHeight;
+                
+                chatContainer.style.left = Math.max(0, Math.min(newLeft, maxX)) + 'px';
+                chatContainer.style.top = Math.max(0, Math.min(newTop, maxY)) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        showView('landing');
+
+        closeChat.addEventListener('click', () => {
+            chatContainer.style.display = 'none';
+        });
+
+        sendMessage.addEventListener('click', () => {
+            const message = chatInput.value.trim();
+            if (message) {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'chat-message sent';
+                messageElement.textContent = message;
+                chatMessages.appendChild(messageElement);
+                chatInput.value = '';
+                
+                setTimeout(() => {
+                    const responseElement = document.createElement('div');
+                    responseElement.className = 'chat-message received';
+                    responseElement.textContent = "Thank you for your message. How can I assist you today?";
+                    chatMessages.appendChild(responseElement);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+            }
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage.click();
+            }
+        });
     </script>
 </body>
 </html>
